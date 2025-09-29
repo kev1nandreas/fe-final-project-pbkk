@@ -33,10 +33,10 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 group">
               <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-sm">PC</span>
+                <span className="text-white font-bold text-sm">CC</span>
               </div>
               <h1 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
-                Project Checker
+                Citation Checker
               </h1>
             </Link>
           </div>
