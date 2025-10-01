@@ -59,7 +59,7 @@ export default function Header() {
 
           {/* Login Button */}
           <div className="items-center md:block hidden">
-            <Link href="/login">
+            <Link href="/app/login">
               <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 px-6 py-2">
                 Login
               </Button>
@@ -107,7 +107,7 @@ export default function Header() {
             About
           </Link>
           <div className="pt-2 border-t border-gray-100">
-            <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/app/login" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 px-6 py-3">
                 Login
               </Button>

@@ -3,7 +3,7 @@ import Button from "../ui/Button";
 
 export default function Hero() {
   return (
-    <section className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-gray-50 text-center px-4">
+    <section className="flex items-center justify-center min-h-[calc(100vh-4rem)] text-center px-4">
       <div className="max-w-[35rem] mr-8 text-left">
         <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
           Ensure your paper has the right citations
