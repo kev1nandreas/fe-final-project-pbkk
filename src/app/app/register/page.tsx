@@ -14,7 +14,6 @@ export default function RegisterPage() {
 
   return (
     <div className="w-screen h-[calc(100vh-5rem)] flex justify-center items-center relative bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Enhanced Glass Backdrop */}
       <div className="absolute inset-0 bg-white/30 backdrop-blur-xl supports-[backdrop-filter]:bg-white/20"></div>
 
       {/* Decorative Elements */}
