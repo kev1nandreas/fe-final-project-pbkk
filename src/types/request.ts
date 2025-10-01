@@ -9,3 +9,7 @@ export type RegisterProps = {
     password: string;
     confirmPassword: string;
 };
+
+export type LLMRequestData = {
+    document: FileList;
+};
