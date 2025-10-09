@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { LLMRequestData } from "@/types/request";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
-import UploadDocument from "@/app/app/upload-document";
+import UploadDocument from "@/components/ui/upload-document";
 
 const useIsLargeScreen = () => {
   const [isLarge, setIsLarge] = useState(false);
