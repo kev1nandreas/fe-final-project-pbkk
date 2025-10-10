@@ -7,6 +7,9 @@ import { useState, useEffect } from "react";
 import { LLMRequestData } from "@/types/request";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import UploadDocument from "@/components/ui/upload-document";
+import { upload } from "@/services/api/main/call";
+import { MAIN_ENDPOINT } from "@/services/api/main/endpoint";
+import ReferencesList, { ReferenceItem } from "@/components/ui/ReferencesList";
 
 const useIsLargeScreen = () => {
   const [isLarge, setIsLarge] = useState(false);
@@ -31,12 +34,57 @@ const useIsLargeScreen = () => {
 export default function MainAppPage() {
   const methods = useForm<LLMRequestData>();
   const [hasSubmitDocument, setHasSubmitDocument] = useState(false);
+  const [references, setReferences] = useState<ReferenceItem[]>([]);
   const isLargeScreen = useIsLargeScreen();
   
   const onSubmit: SubmitHandler<LLMRequestData> = (data) => {
-    setHasSubmitDocument(!hasSubmitDocument);
-    console.log(hasSubmitDocument);
-    console.log(data);
+    // Toggle UI state
+    setHasSubmitDocument(true);
+
+    // Build FormData from file field (document)
+    const fileList = (data as any).document as FileList | undefined;
+    if (!fileList || fileList.length === 0) {
+      console.warn("No file provided");
+      return;
+    }
+
+    const formData = new FormData();
+    // Support single file for now; if multiple expected, append all
+    formData.append("document", fileList[0]);
+
+    (async () => {
+      const res = await upload<{ references?: ReferenceItem[] }>(
+        MAIN_ENDPOINT.Documents.Upload,
+        formData,
+      );
+
+      if (res.OK) {
+        // Try common shapes: res.Kind.Results, res.Kind (array), or res.Kind.Results.references
+        const kind: any = res.Kind;
+        let refs: ReferenceItem[] = [];
+
+        if (kind && Array.isArray((kind as any).Results)) {
+          refs = (kind as any).Results;
+        } else if (kind && Array.isArray(kind)) {
+          refs = kind;
+        } else if (kind && (kind as any).Results && Array.isArray((kind as any).Results.references)) {
+          refs = (kind as any).Results.references;
+        } else if ((res as any).Results && Array.isArray((res as any).Results.references)) {
+          refs = (res as any).Results.references;
+        }
+
+        // Map to ReferenceItem if necessary
+        refs = refs.map((r: any) =>
+          typeof r === "string"
+            ? { title: r, raw: r }
+            : { id: r.id ?? r._id ?? undefined, title: r.title ?? r.name ?? r.raw ?? "Untitled", authors: r.authors, year: r.year, raw: r.raw },
+        );
+
+        setReferences(refs);
+      } else {
+        console.error("Upload failed", res);
+      }
+    })();
   };
 
   return (
@@ -66,9 +114,13 @@ export default function MainAppPage() {
           transition={{ duration: 0.3, x: {type: "spring", stiffness:300, damping:30, mass: 0.5} }}
           className="w-full max-w-2xl mx-auto px-4 absolute right-0 lg:relative lg:right-auto lg:mx-0 lg:max-w-md"
         >
-          <div className="bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl p-6 lg:p-8">
-            Enter your question:
-            <input type="text" className="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ask a question about your document..." />
+          <div className="bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl p-6 lg:p-8 space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Enter your question:</label>
+              <input type="text" className="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ask a question about your document..." />
+            </div>
+
+            <ReferencesList items={references} />
           </div>
         </motion.div>
       )}
