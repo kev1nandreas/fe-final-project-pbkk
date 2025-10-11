@@ -201,7 +201,7 @@ export default function Upload({
   );
 
   const uploadAreaClasses = `
-    relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
+    relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer h-[12rem]
     transition-all duration-200 ease-in-out
     ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300 hover:border-gray-400"}
     ${disabled ? "opacity-50 cursor-not-allowed bg-gray-50" : "hover:bg-gray-50"}
