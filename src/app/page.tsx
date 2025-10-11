@@ -1,15 +1,13 @@
 "use client";
 
-import Button from "@/components/ui/Button";
-import Upload from "@/components/ui/Upload";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { LLMRequestData } from "@/types/request";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { LLMRequestDataDocs, LLMRequestDataText } from "@/types/request";
+import { SubmitHandler } from "react-hook-form";
 import UploadDocument from "@/components/layout/upload-document";
-import { upload } from "@/services/api/main/call";
-import { MAIN_ENDPOINT } from "@/services/api/main/endpoint";
 import ReferencesList, { ReferenceItem } from "@/components/ui/ReferencesList";
+import UploadText from "@/components/layout/upload-text";
+import Button from "@/components/ui/Button";
 
 const useIsLargeScreen = () => {
   const [isLarge, setIsLarge] = useState(false);
@@ -32,59 +30,39 @@ const useIsLargeScreen = () => {
 };
 
 export default function MainAppPage() {
-  const methods = useForm<LLMRequestData>();
+  const [isUploadDocument, setIsUploadDocument] = useState(true);
+  const [isUploadText, setIsUploadText] = useState(false);
   const [hasSubmitDocument, setHasSubmitDocument] = useState(false);
+  const [hasSubmitText, setHasSubmitText] = useState(false);
   const [references, setReferences] = useState<ReferenceItem[]>([]);
   const isLargeScreen = useIsLargeScreen();
+  const headerTitle = isUploadDocument ? "Upload Your Document" : "Enter Your Text";
+  const headerSubtitle = isUploadDocument
+    ? "Upload your academic paper for citation analysis"
+    : "Paste your paragraph or text for citation analysis";
   
-  const onSubmit: SubmitHandler<LLMRequestData> = (data) => {
-    // Toggle UI state
+  const onClickDocument = () => {
+    setIsUploadDocument(true);
+    setIsUploadText(false);
+    setHasSubmitDocument(false);
+    setHasSubmitText(false);
+  }
+
+  const onClickText = () => {
+    setIsUploadDocument(false);
+    setIsUploadText(true);
+    setHasSubmitDocument(false);
+    setHasSubmitText(false);
+  }
+
+  const onSubmitDocument: SubmitHandler<LLMRequestDataDocs> = (data) => {
     setHasSubmitDocument(true);
+    console.log("Submitting document for analysis...", data);
+  };
 
-    // Build FormData from file field (document)
-    const fileList = (data as any).document as FileList | undefined;
-    if (!fileList || fileList.length === 0) {
-      console.warn("No file provided");
-      return;
-    }
-
-    const formData = new FormData();
-    // Support single file for now; if multiple expected, append all
-    formData.append("document", fileList[0]);
-
-    (async () => {
-      const res = await upload<{ references?: ReferenceItem[] }>(
-        MAIN_ENDPOINT.Documents.Upload,
-        formData,
-      );
-
-      if (res.OK) {
-        // Try common shapes: res.Kind.Results, res.Kind (array), or res.Kind.Results.references
-        const kind: any = res.Kind;
-        let refs: ReferenceItem[] = [];
-
-        if (kind && Array.isArray((kind as any).Results)) {
-          refs = (kind as any).Results;
-        } else if (kind && Array.isArray(kind)) {
-          refs = kind;
-        } else if (kind && (kind as any).Results && Array.isArray((kind as any).Results.references)) {
-          refs = (kind as any).Results.references;
-        } else if ((res as any).Results && Array.isArray((res as any).Results.references)) {
-          refs = (res as any).Results.references;
-        }
-
-        // Map to ReferenceItem if necessary
-        refs = refs.map((r: any) =>
-          typeof r === "string"
-            ? { title: r, raw: r }
-            : { id: r.id ?? r._id ?? undefined, title: r.title ?? r.name ?? r.raw ?? "Untitled", authors: r.authors, year: r.year, raw: r.raw },
-        );
-
-        setReferences(refs);
-      } else {
-        console.error("Upload failed", res);
-      }
-    })();
+  const onSubmitText: SubmitHandler<LLMRequestDataText> = (data) => {
+    setHasSubmitText(true);
+    console.log("Submitting text for analysis...", data);
   };
 
   return (
@@ -105,7 +83,34 @@ export default function MainAppPage() {
           maxWidth: { type: "tween", duration: 0.3, ease: "anticipate" } 
         }}
         className={`w-full max-w-2xl mx-auto px-4`}>
-        <UploadDocument onSubmit={onSubmit} />
+        <div className="bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl p-8 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/20 before:to-transparent before:pointer-events-none relative">
+          <div className="relative text-center mb-8">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">CC</span>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text">
+                Citation Checker
+              </h1>
+            </div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              {headerTitle}
+            </h2>
+            <p className="text-gray-600">
+              {headerSubtitle}
+            </p>
+          </div>
+
+          <div className="relative z-10 space-y-6">
+            <div className="flex gap-4 justify-center items-center">
+              <Button type="button" className={`${isUploadDocument ? 'bg-blue-400' : 'bg-gray-400'} w-[12rem]`} onClick={onClickDocument}>Upload Document</Button>
+              <Button type="button" className={`${isUploadText ? 'bg-blue-400' : 'bg-gray-400'} w-[12rem]`} onClick={onClickText}>Upload Text</Button>
+            </div>
+
+            {isUploadDocument && <UploadDocument onSubmit={onSubmitDocument} />}
+            {isUploadText && <UploadText onSubmit={onSubmitText} />}
+          </div>
+        </div>
       </motion.div>
       {hasSubmitDocument && isLargeScreen && (
         <motion.div 
