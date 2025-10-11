@@ -10,6 +10,10 @@ export type RegisterProps = {
     confirmPassword: string;
 };
 
-export type LLMRequestData = {
+export type LLMRequestDataDocs = {
     document: FileList;
+};
+
+export type LLMRequestDataText = {
+    paragraph: string;
 };
