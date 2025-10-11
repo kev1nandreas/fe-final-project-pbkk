@@ -2,8 +2,6 @@
 
 import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import { LLMRequestData } from "@/types/request";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 
