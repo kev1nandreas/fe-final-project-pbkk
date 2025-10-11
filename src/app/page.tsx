@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { LLMRequestDataDocs, LLMRequestDataText } from "@/types/request";
 import { SubmitHandler } from "react-hook-form";
 import UploadDocument from "@/components/layout/upload-document";
-import ReferencesList, { ReferenceItem } from "@/components/ui/ReferencesList";
 import UploadText from "@/components/layout/upload-text";
 import Button from "@/components/ui/Button";
 
@@ -34,7 +33,6 @@ export default function MainAppPage() {
   const [isUploadText, setIsUploadText] = useState(false);
   const [hasSubmitDocument, setHasSubmitDocument] = useState(false);
   const [hasSubmitText, setHasSubmitText] = useState(false);
-  const [references, setReferences] = useState<ReferenceItem[]>([]);
   const isLargeScreen = useIsLargeScreen();
   const headerTitle = isUploadDocument ? "Upload Your Document" : "Enter Your Text";
   const headerSubtitle = isUploadDocument
@@ -74,8 +72,8 @@ export default function MainAppPage() {
         animate={{ 
           opacity: 1,
           y: 0, 
-          x: hasSubmitDocument && isLargeScreen ? "-10rem" : 0,
-          maxWidth: hasSubmitDocument && isLargeScreen ? '28rem' : "42rem" 
+          x: 0,
+          maxWidth: "42rem" 
         }}
         transition={{ 
           duration: 0.3, 
@@ -112,23 +110,6 @@ export default function MainAppPage() {
           </div>
         </div>
       </motion.div>
-      {hasSubmitDocument && isLargeScreen && (
-        <motion.div 
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, x: {type: "spring", stiffness:300, damping:30, mass: 0.5} }}
-          className="w-full max-w-2xl mx-auto px-4 absolute right-0 lg:relative lg:right-auto lg:mx-0 lg:max-w-md"
-        >
-          <div className="bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl p-6 lg:p-8 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Enter your question:</label>
-              <input type="text" className="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ask a question about your document..." />
-            </div>
-
-            <ReferencesList items={references} />
-          </div>
-        </motion.div>
-      )}
     </div>
   );
 }
