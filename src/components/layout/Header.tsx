@@ -43,29 +43,16 @@ export default function Header() {
 
           {/* Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/"
-              className="relative text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-            >
-              <span className="relative z-10">Home</span>
-            </Link>
-            <Link
-              href="/about"
-              className="relative text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
-            >
-              <span className="relative z-10">About</span>
-            </Link>
+            {menuItems.map((item, index) => (
+              <Link
+                key={index}
+                href={item.href}
+                className="relative text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200 px-3 py-2 rounded-md hover:bg-gray-100 group"
+              >
+                <span className="relative z-10">{item.name}</span>
+              </Link>
+            ))}
           </nav>
-
-          {/* Login Button */}
-          <div className="items-center md:block hidden">
-            <Link href="/login">
-              <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 px-6 py-2">
-                Login
-              </Button>
-            </Link>
-          </div>
-
           {/* Toggle Button */}
           <div className="flex items-center md:hidden">
             <button
@@ -92,29 +79,24 @@ export default function Header() {
         }`}
       >
         <div className="border-t border-gray-200 px-6 py-4 space-y-3 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white shadow-lg">
-          <Link
-            href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-gray-700 hover:text-blue-600 font-medium py-3 px-2 rounded-md hover:bg-gray-100 transition-all duration-200 transform hover:translate-x-1"
-          >
-            Home
-          </Link>
-          <Link
-            href="/about"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block text-gray-700 hover:text-blue-600 font-medium py-3 px-2 rounded-md hover:bg-gray-100 transition-all duration-200 transform hover:translate-x-1"
-          >
-            About
-          </Link>
-          <div className="pt-2 border-t border-gray-100">
-            <Link href="/app/login" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 px-6 py-3">
-                Login
-              </Button>
+          {menuItems.map((item, index) => (
+            <Link
+              key={index}
+              href={item.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 hover:text-blue-600 font-medium py-3 px-2 rounded-md hover:bg-gray-100 transition-all duration-200 transform hover:translate-x-1"
+            >
+              {item.name}
             </Link>
-          </div>
+          ))}
         </div>
       </div>
     </header>
   );
 }
+
+const menuItems = [
+  { name: "Home", href: "/" },
+  { name: "History", href: "/history" },
+  { name: "References", href: "/references" },
+];
