@@ -145,7 +145,7 @@ export default function MainAppPage() {
                     placeholder="Drop your academic paper here or click to browse"
                     className="w-full"
                     validation={{
-                      required: "Please upload a document to analyze",
+                      minLength: { value: 1, message: "Please upload a document to analyze" }
                     }}
                   />
                 )}
