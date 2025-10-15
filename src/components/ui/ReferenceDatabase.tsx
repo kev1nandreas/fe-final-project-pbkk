@@ -105,7 +105,7 @@ export default function ReferenceDatabase({
                 />
               </div>
 
-              <div className="max-h-[18rem] space-y-4 overflow-y-auto pr-1 flex justify-center flex-wrap gap-2 p-2">
+              <div className="max-h-[18rem] space-y-4 overflow-y-auto pr-1 flex justify-center flex-wrap p-2">
                 {filteredCatalog.length === 0 && (
                   <p className="text-sm text-gray-600">
                     No references match your search criteria. Try adjusting the

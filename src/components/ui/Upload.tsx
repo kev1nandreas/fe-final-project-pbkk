@@ -245,8 +245,8 @@ export default function Upload({
 
         <div className="text-gray-600">
           <p className="text-lg font-medium mb-1">{placeholder}</p>
-          {accept && <p className="text-sm">Supported formats: {accept}</p>}
-          <p className="text-xs text-gray-500 mt-1">Maximum file size: {maxSize}MB</p>
+          {accept && <p className="text-sm hidden md:block">Supported formats: {accept}</p>}
+          <p className="text-xs text-gray-500 mt-1 hidden md:block">Maximum file size: {maxSize}MB</p>
         </div>
       </div>
 

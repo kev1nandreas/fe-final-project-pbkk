@@ -13,4 +13,7 @@ export type RegisterProps = {
 export type LLMRequestData = {
     document?: FileList;
     paragraph?: string;
+    similarityThreshold: number;
+    citationStrategy: string;
+    selectedReferences: string[];
 };
