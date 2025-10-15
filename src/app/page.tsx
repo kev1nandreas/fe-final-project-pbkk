@@ -1,86 +1,82 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
-import { LLMRequestDataDocs, LLMRequestDataText } from "@/types/request";
-import { SubmitHandler } from "react-hook-form";
-import UploadDocument from "@/components/layout/upload-document";
-import UploadText from "@/components/layout/upload-text";
+import { useState } from "react";
+import { LLMRequestData } from "@/types/request";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
+import Upload from "@/components/ui/Upload";
+import ReferenceDatabase, {
+  ReferenceEntry,
+} from "@/components/ui/ReferenceDatabase";
 
-const useIsLargeScreen = () => {
-  const [isLarge, setIsLarge] = useState(false);
-  // The only reason we use useState is because 
-  // we need to re-render when user decides to be slick
-  // and test if the website is responsive (resize the window)
-  // ^mf (i hate re-render)
-  
-  // and also because useEffect runs after initial render
-  // (so we still need to use useState)
-
-  useEffect(() => {
-    const checkSize = () => setIsLarge(window.innerWidth >= 1024); // lg breakpoint
-    checkSize();
-    window.addEventListener('resize', checkSize);
-    return () => window.removeEventListener('resize', checkSize);
-  }, []);
-  
-  return isLarge;
-};
+const referenceCatalog: ReferenceEntry[] = [
+  {
+    original_filename: "catalog-1",
+    paper_title: "Enhancing Citation Accuracy in Academic Writing",
+    model_name: "CitationAccuracyModelV1",
+  },
+  {
+    original_filename: "catalog-2",
+    paper_title: "Automated Reference Matching for Research Integrity",
+    model_name: "RefMatchIntegrity2022",
+  },
+  {
+    original_filename: "catalog-3",
+    paper_title: "Guidelines for Evaluating Supporting Literature",
+    model_name: "GuidelinesEvalModel2023",
+  },
+];
 
 export default function MainAppPage() {
+  const methods = useForm<LLMRequestData>();
   const [isUploadDocument, setIsUploadDocument] = useState(true);
   const [isUploadText, setIsUploadText] = useState(false);
-  const [hasSubmitDocument, setHasSubmitDocument] = useState(false);
-  const [hasSubmitText, setHasSubmitText] = useState(false);
-  const isLargeScreen = useIsLargeScreen();
-  const headerTitle = isUploadDocument ? "Upload Your Document" : "Enter Your Text";
+  const [selectedReferenceIds, setSelectedReferenceIds] = useState<string[]>(
+    []
+  );
+  const headerTitle = isUploadDocument
+    ? "Upload Your Document"
+    : "Enter Your Text";
   const headerSubtitle = isUploadDocument
     ? "Upload your academic paper for citation analysis"
     : "Paste your paragraph or text for citation analysis";
-  
+
   const onClickDocument = () => {
     setIsUploadDocument(true);
     setIsUploadText(false);
-    setHasSubmitDocument(false);
-    setHasSubmitText(false);
-  }
+    methods.reset();
+  };
 
   const onClickText = () => {
     setIsUploadDocument(false);
     setIsUploadText(true);
-    setHasSubmitDocument(false);
-    setHasSubmitText(false);
-  }
-
-  const onSubmitDocument: SubmitHandler<LLMRequestDataDocs> = (data) => {
-    setHasSubmitDocument(true);
-    console.log("Submitting document for analysis...", data);
+    methods.reset();
   };
 
-  const onSubmitText: SubmitHandler<LLMRequestDataText> = (data) => {
-    setHasSubmitText(true);
-    console.log("Submitting text for analysis...", data);
+  const onSubmit: SubmitHandler<LLMRequestData> = (data) => {
+    console.log("Submitting document for analysis...", data);
+    console.log("Selected references:", selectedReferenceIds);
   };
 
   return (
     <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-
       {/* Upload Container */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20, maxWidth: "42rem" }}
-        animate={{ 
+        animate={{
           opacity: 1,
-          y: 0, 
+          y: 0,
           x: 0,
-          maxWidth: "42rem" 
+          maxWidth: "42rem",
         }}
-        transition={{ 
-          duration: 0.3, 
-          x: {type: "spring", stiffness:300, damping:30, mass: 0.5},
-          maxWidth: { type: "tween", duration: 0.3, ease: "anticipate" } 
+        transition={{
+          duration: 0.3,
+          x: { type: "spring", stiffness: 300, damping: 30, mass: 0.5 },
+          maxWidth: { type: "tween", duration: 0.3, ease: "anticipate" },
         }}
-        className={`w-full max-w-2xl mx-auto px-4`}>
+        className={`w-full max-w-2xl mx-auto px-4`}
+      >
         <div className="bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl p-8 before:absolute before:inset-0 before:rounded-2xl before:bg-gradient-to-br before:from-white/20 before:to-transparent before:pointer-events-none relative">
           <div className="relative text-center mb-8">
             <div className="flex items-center justify-center space-x-3 mb-4">
@@ -94,19 +90,85 @@ export default function MainAppPage() {
             <h2 className="text-xl font-semibold text-gray-800 mb-2">
               {headerTitle}
             </h2>
-            <p className="text-gray-600">
-              {headerSubtitle}
-            </p>
+            <p className="text-gray-600">{headerSubtitle}</p>
           </div>
 
           <div className="relative z-10 space-y-6">
             <div className="flex gap-4 justify-center items-center">
-              <Button type="button" className={`${isUploadDocument ? 'bg-blue-400' : 'bg-gray-400'} w-[12rem]`} onClick={onClickDocument}>Upload Document</Button>
-              <Button type="button" className={`${isUploadText ? 'bg-blue-400' : 'bg-gray-400'} w-[12rem]`} onClick={onClickText}>Upload Text</Button>
+              <Button
+                type="button"
+                className={`${
+                  isUploadDocument ? "bg-blue-400" : "bg-gray-400"
+                } w-[12rem]`}
+                onClick={onClickDocument}
+              >
+                Upload Document
+              </Button>
+              <Button
+                type="button"
+                className={`${
+                  isUploadText ? "bg-blue-400" : "bg-gray-400"
+                } w-[12rem]`}
+                onClick={onClickText}
+              >
+                Upload Text
+              </Button>
             </div>
 
-            {isUploadDocument && <UploadDocument onSubmit={onSubmitDocument} />}
-            {isUploadText && <UploadText onSubmit={onSubmitText} />}
+            <FormProvider {...methods}>
+              <form
+                onSubmit={methods.handleSubmit(onSubmit)}
+                className="space-y-6"
+              >
+                {isUploadDocument && (
+                  <Upload
+                    id="document"
+                    accept=".pdf,.doc,.docx,.txt"
+                    maxSize={5}
+                    placeholder="Drop your academic paper here or click to browse"
+                    className="w-full"
+                    validation={{
+                      required: "Please upload a document to analyze",
+                    }}
+                  />
+                )}
+                {isUploadText && (
+                  <div>
+                    <textarea
+                      id="paragraph"
+                      rows={8}
+                      placeholder="Paste your academic text here for citation analysis..."
+                      className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm h-[12rem] border border-black/30 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200"
+                      {...methods.register("paragraph", {
+                        required: "Please enter some text to analyze",
+                        minLength: {
+                          value: 10,
+                          message: "Text must be at least 10 characters long",
+                        },
+                      })}
+                    />
+                    {methods.formState.errors.paragraph && (
+                      <p className="mt-2 text-sm text-red-600">
+                        {methods.formState.errors.paragraph.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3"
+                >
+                  Analyze Citations
+                </Button>
+              </form>
+            </FormProvider>
+
+            <ReferenceDatabase
+              catalog={referenceCatalog}
+              selectedIds={selectedReferenceIds}
+              onSelectionChange={setSelectedReferenceIds}
+            />
           </div>
         </div>
       </motion.div>

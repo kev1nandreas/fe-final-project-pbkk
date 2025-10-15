@@ -1,5 +1,6 @@
 "use client";
 
+import { truncateString } from "@/lib/utils";
 import { useState, useRef, useCallback, memo } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { FiUploadCloud } from "react-icons/fi";
@@ -39,7 +40,7 @@ const FileItem = memo(
       <div className="flex items-center space-x-3">
         <FiUploadCloud />
         <div>
-          <p className="text-sm font-medium text-gray-900">{file.name}</p>
+          <p className="text-sm font-medium text-gray-900 ">{truncateString(file.name, 60)}</p>
           <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
         </div>
       </div>
