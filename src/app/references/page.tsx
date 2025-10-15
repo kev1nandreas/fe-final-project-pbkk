@@ -36,14 +36,14 @@ export default function ReferencesPage() {
   return (
     <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
       <motion.div
-        initial={{ opacity: 0, y: 20, maxWidth: "42rem" }}
-        animate={{ opacity: 1, y: 0, maxWidth: "42rem" }}
+        initial={{ opacity: 0, y: 20, maxWidth: "50rem" }}
+        animate={{ opacity: 1, y: 0, maxWidth: "50rem" }}
         transition={{
           duration: 0.3,
           x: { type: "spring", stiffness: 300, damping: 30, mass: 0.5 },
           maxWidth: { type: "tween", duration: 0.3, ease: "anticipate" },
         }}
-        className={`w-full max-w-2xl mx-auto px-4 bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl py-8 relative`}
+        className={`w-full max-w-2xl mx-auto p-4 bg-white/10 backdrop-blur-2xl supports-[backdrop-filter]:bg-white/5 shadow-2xl border border-white/30 rounded-2xl py-8 relative`}
       >
         <div className="relative text-center mb-8">
           <div className="flex items-center justify-center space-x-3 mb-4">
