@@ -46,7 +46,11 @@ export async function post<T>(
 	data: Record<string, unknown> | FormData,
 ): Promise<Res<T>> {
 	try {
-		const response: AxiosResponse<T> = await api.post(url, data);
+		const response: AxiosResponse<T> = await api.post(url, data, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		} );
 		return {
 			OK: true,
 			StatusCode: response.status,

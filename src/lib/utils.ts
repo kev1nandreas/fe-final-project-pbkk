@@ -11,3 +11,12 @@ export function truncateString(str: string, num: number) {
   }
   return str.slice(0, num) + "...";
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function parseFormData(data: any) {
+  const formData = new FormData();
+  for (const key in data) {
+    formData.append(key, data[key]);
+  }
+  return formData;
+}

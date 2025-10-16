@@ -1,8 +1,3 @@
-export type LoginProps = {
-    email: string;
-    password: string;
-};
-
 export type RegisterProps = {
     name: string;
     email: string;
@@ -16,4 +11,9 @@ export type LLMRequestData = {
     similarityThreshold: number;
     citationStrategy: string;
     selectedReferences: string[];
+};
+
+export type ReferenceUploadData = {
+    files: FileList;
+    model_name: string;
 };

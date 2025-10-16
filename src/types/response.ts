@@ -20,6 +20,15 @@ export interface ReferencesResponse {
 	model_name: string;
 }
 
+export interface ModelsResponse {
+	ollama: string[];
+	gemini: string[];
+}
+
 export function typecastReferencesResponse(data: unknown): ReferencesResponse[] | undefined {
   return data as ReferencesResponse[] | undefined;
+}
+
+export function typecastModelsResponse(data: unknown): ModelsResponse | undefined {
+  return data as ModelsResponse | undefined;
 }
