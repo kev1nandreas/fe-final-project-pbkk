@@ -6,12 +6,11 @@ import { LLMRequestData } from "@/types/request";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
-import ReferenceDatabase, {
-  ReferenceEntry,
-} from "@/components/ui/ReferenceDatabase";
+import ReferenceDatabase from "@/components/ui/ReferenceDatabase";
 import CardController from "@/components/ui/CardController";
+import { ReferencesResponse } from "@/types/response";
 
-const referenceCatalog: ReferenceEntry[] = [
+const referenceCatalog: ReferencesResponse[] = [
   {
     original_filename: "catalog-1",
     paper_title: "Enhancing Citation Accuracy in Academic Writing",

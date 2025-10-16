@@ -1,16 +1,11 @@
 "use client";
 
+import { ReferencesResponse } from "@/types/response";
 import { useCallback, useMemo, useState } from "react";
 import { FiChevronDown, FiSearch } from "react-icons/fi";
 
-export type ReferenceEntry = {
-  original_filename: string;
-  paper_title: string;
-  model_name: string;
-};
-
 type ReferenceDatabaseProps = {
-  catalog: ReferenceEntry[];
+  catalog: ReferencesResponse[];
   selectedIds?: string[];
   onSelectionChange?: (ids: string[]) => void;
 };

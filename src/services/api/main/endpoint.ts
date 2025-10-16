@@ -1,11 +1,10 @@
 export const MAIN_ENDPOINT = {
-	Auth: {
-		Login: "/auth/login",
-		CurrentUser: "/auth/me",
+	Info: {
+		Embeddings: "/info/embeddings",
+		Models: "/info/models",
 	},
-	Documents: {
-		// NOTE: these are reasonable default paths. Adjust if your backend uses different routes.
-		Upload: "/documents/upload",
-		List: "/documents",
-	},
+	Processing: {
+		Search: "/processing/search",
+		UploadReferences: "/processing/upload-and-process",
+	}
 };

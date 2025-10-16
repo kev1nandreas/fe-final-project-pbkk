@@ -13,3 +13,13 @@ export type ResponseMeta<T> = {
 		Pagination?: PaginationType;
 	};
 };
+
+export interface ReferencesResponse {
+	original_filename: string;
+	paper_title: string;
+	model_name: string;
+}
+
+export function typecastReferencesResponse(data: unknown): ReferencesResponse[] | undefined {
+  return data as ReferencesResponse[] | undefined;
+}

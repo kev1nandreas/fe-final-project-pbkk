@@ -1,49 +1,14 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
 import References from "@/components/ui/References";
-import type { ReferenceEntry } from "@/components/ui/ReferenceDatabase";
 import CardController from "@/components/ui/CardController";
-
-type ReferenceCatalogEntry = ReferenceEntry & {
-  year?: number;
-  author?: string;
-  summary?: string;
-};
-
-const initialCatalog: ReferenceCatalogEntry[] = [
-  {
-    original_filename: "catalog-1.pdf",
-    paper_title: "Deep Learning for Natural Language Processing",
-    model_name: "LLM-Reader",
-    author: "Jane Doe",
-    year: 2023,
-    summary:
-      "A comprehensive overview of deep learning techniques applied to NLP tasks.",
-  },
-  {
-    original_filename: "catalog-2.pdf",
-    paper_title: "Citation Analysis in Academic Research",
-    model_name: "CitationAccuracyModelV1",
-    author: "John Smith",
-    year: 2022,
-    summary:
-      "Methods and tooling for identifying citation links across academic corpora.",
-  },
-  {
-    original_filename: "catalog-3.pdf",
-    paper_title: "Efficient Document Embedding Methods",
-    model_name: "EmbeddingSuite-XL",
-    author: "Alice Johnson",
-    year: 2024,
-    summary:
-      "Recent advances in embedding pipelines for large-scale document analysis.",
-  },
-];
+import { ReferencesResponse } from "@/types/response";
+import { useFetchReferences } from "@/services/api/hook/useInfo";
 
 type ReferenceUploadForm = {
   files?: FileList;
@@ -51,7 +16,8 @@ type ReferenceUploadForm = {
 };
 
 export default function ReferencesPage() {
-  const [catalog, setCatalog] = useState<ReferenceCatalogEntry[]>(initialCatalog);
+  const { data: referenceList, isLoading } = useFetchReferences();
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadResetKey, setUploadResetKey] = useState(0);
 
@@ -89,18 +55,13 @@ export default function ReferencesPage() {
     handleCloseModal();
   };
 
-  const referenceList = useMemo(
-    () =>
-      catalog.map((entry, index) => ({
-        id: index + 1,
-        title: entry.paper_title,
-        author: entry.author ?? entry.model_name,
-        year: entry.year ?? new Date().getFullYear(),
-        summary:
-          entry.summary ?? `Managed reference processed via ${entry.model_name}.`,
-      })),
-    [catalog]
-  );
+  if (isLoading) {
+    return (
+      <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center">
+        <p className="text-gray-500">Loading references...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
@@ -127,8 +88,8 @@ export default function ReferencesPage() {
             Reference Library
           </h2>
           <p className="text-gray-600">
-            Review existing references and upload additional documents to
-            expand the catalog.
+            Review existing references and upload additional documents to expand
+            the catalog.
           </p>
         </div>
 
@@ -139,7 +100,7 @@ export default function ReferencesPage() {
                 Managed References
               </p>
               <p className="text-xs text-gray-500">
-                {catalog.length} total references
+                {referenceList.length} total references
               </p>
             </div>
             <Button
@@ -157,8 +118,8 @@ export default function ReferencesPage() {
                 No references have been uploaded yet.
               </p>
             ) : (
-              referenceList.map((reference) => (
-                <References key={reference.id} reference={reference} />
+              referenceList.map((reference: ReferencesResponse) => (
+                <References key={reference.model_name} reference={reference} />
               ))
             )}
           </div>
@@ -206,7 +167,10 @@ export default function ReferencesPage() {
                     { value: "llama-2", label: "LLaMA 2" },
                     { value: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
                     { value: "gpt-4", label: "GPT-4" },
-                    { value: "embedding-suite-xl", label: "Embedding Suite XL" },
+                    {
+                      value: "embedding-suite-xl",
+                      label: "Embedding Suite XL",
+                    },
                   ]}
                 />
 
@@ -218,7 +182,10 @@ export default function ReferencesPage() {
                   maxSize={10}
                   placeholder="Drag and drop reference documents or click to browse"
                   validation={{
-                    minLength: { value: 1, message: "Please upload at least one reference document" }
+                    minLength: {
+                      value: 1,
+                      message: "Please upload at least one reference document",
+                    },
                   }}
                 />
 
