@@ -1,5 +1,6 @@
 "use client";
 
+import { truncateString } from "@/lib/utils";
 import { useState, useRef, useCallback, memo } from "react";
 import { RegisterOptions, useFormContext } from "react-hook-form";
 import { FiUploadCloud } from "react-icons/fi";
@@ -39,7 +40,7 @@ const FileItem = memo(
       <div className="flex items-center space-x-3">
         <FiUploadCloud />
         <div>
-          <p className="text-sm font-medium text-gray-900">{file.name}</p>
+          <p className="text-sm font-medium text-gray-900 ">{truncateString(file.name, 40)}</p>
           <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
         </div>
       </div>
@@ -78,6 +79,7 @@ export default function Upload({
   const {
     setValue,
     trigger,
+    clearErrors,
     formState: { errors },
   } = useFormContext();
 
@@ -151,9 +153,12 @@ export default function Upload({
         shouldValidate: true,
         shouldDirty: true,
       });
+      if (updatedFiles.length > 0) {
+        clearErrors(id);
+      }
       trigger(id);
     },
-    [id, maxSize, maxSizeBytes, multiple, accept, validateFileType, setValue, files, trigger]
+    [id, maxSize, maxSizeBytes, multiple, accept, validateFileType, setValue, clearErrors, files, trigger]
   );
 
   const handleChange = useCallback(
@@ -195,9 +200,12 @@ export default function Upload({
         shouldValidate: true,
         shouldDirty: true,
       });
+      if (newFiles.length > 0) {
+        clearErrors(id);
+      }
       trigger(id);
     },
-    [files, id, setValue, trigger]
+    [files, id, setValue, trigger, clearErrors]
   );
 
   const uploadAreaClasses = `
@@ -244,8 +252,8 @@ export default function Upload({
 
         <div className="text-gray-600">
           <p className="text-lg font-medium mb-1">{placeholder}</p>
-          {accept && <p className="text-sm">Supported formats: {accept}</p>}
-          <p className="text-xs text-gray-500 mt-1">Maximum file size: {maxSize}MB</p>
+          {accept && <p className="text-sm hidden md:block">Supported formats: {accept}</p>}
+          <p className="text-xs text-gray-500 mt-1 hidden md:block">Maximum file size: {maxSize}MB</p>
         </div>
       </div>
 
