@@ -8,27 +8,30 @@ import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
 import ReferenceDatabase from "@/components/ui/ReferenceDatabase";
 import CardController from "@/components/ui/CardController";
-import { ReferencesResponse } from "@/types/response";
+import { useFetchModels, useFetchReferences } from "@/services/api/hook/useInfo";
 
-const referenceCatalog: ReferencesResponse[] = [
-  {
-    original_filename: "catalog-1",
-    paper_title: "Enhancing Citation Accuracy in Academic Writing",
-    model_name: "CitationAccuracyModelV1",
-  },
-  {
-    original_filename: "catalog-2",
-    paper_title: "Automated Reference Matching for Research Integrity",
-    model_name: "RefMatchIntegrity2022",
-  },
-  {
-    original_filename: "catalog-3",
-    paper_title: "Guidelines for Evaluating Supporting Literature",
-    model_name: "GuidelinesEvalModel2023",
-  },
-];
 
 export default function MainAppPage() {
+  const { data: referenceList, isLoading } = useFetchReferences();
+  const { data: modelList } = useFetchModels();
+  const [modelParsed, setModelParsed] = useState<
+    { value: string; label: string }[]
+  >([]);
+
+  useEffect(() => {
+    if (modelList) {
+      const formattedModels: { value: string; label: string }[] = [];
+      modelList.ollama.concat(modelList.gemini).forEach((model: string) => {
+        formattedModels.push({
+          value: model,
+          label:
+            model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
+        });
+      });
+      setModelParsed(formattedModels);
+    }
+  }, [modelList]);
+
   const createDefaultValues = (): LLMRequestData => ({
     document: undefined,
     paragraph: "",
@@ -40,7 +43,7 @@ export default function MainAppPage() {
   const methods = useForm<LLMRequestData>({
     defaultValues: createDefaultValues(),
   });
-  
+
   const [isUploadDocument, setIsUploadDocument] = useState(true);
   const [isUploadText, setIsUploadText] = useState(false);
   const selectedReferenceIds = methods.watch("selectedReferences", []);
@@ -144,7 +147,10 @@ export default function MainAppPage() {
                     placeholder="Drop your academic paper here or click to browse"
                     className="w-full"
                     validation={{
-                      minLength: { value: 1, message: "Please upload a document to analyze" }
+                      minLength: {
+                        value: 1,
+                        message: "Please upload a document to analyze",
+                      },
                     }}
                   />
                 )}
@@ -209,16 +215,12 @@ export default function MainAppPage() {
                         shouldTouch: true,
                       })
                     }
-                    options={[
-                      { value: "llama-2", label: "LLaMA 2" },
-                      { value: "gpt-3.5-turbo", label: "GPT-3.5 Turbo" },
-                      { value: "gpt-4", label: "GPT-4" },
-                    ]}
+                    options={modelParsed}
                   />
                 </div>
 
                 <ReferenceDatabase
-                  catalog={referenceCatalog}
+                  catalog={referenceList || []}
                   selectedIds={selectedReferenceIds}
                   onSelectionChange={(ids) =>
                     methods.setValue("selectedReferences", ids, {
