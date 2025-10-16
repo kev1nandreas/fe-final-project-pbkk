@@ -90,7 +90,7 @@ export default function ReferencesPage() {
     handleCloseModal();
   };
 
-  const isUploading = mutation.isLoading ?? mutation.isPending;
+  const isUploading = mutation.isPending;
 
   if (isLoading) {
     return (
