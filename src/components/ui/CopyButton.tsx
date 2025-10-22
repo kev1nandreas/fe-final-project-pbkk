@@ -1,7 +1,12 @@
 import { IoClipboardOutline } from "react-icons/io5";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
-export default function CopyButton(text: string) {
+interface CopyButtonProps {
+  text: string;
+}
+
+export default function CopyButton({ text }: CopyButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 

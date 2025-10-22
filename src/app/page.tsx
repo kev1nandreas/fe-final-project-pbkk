@@ -17,7 +17,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export default function MainAppPage() {
-  const { data: referenceList, isLoading } = useFetchReferences();
+  const { data: referenceList } = useFetchReferences();
   const { data: modelList } = useFetchModels();
   const router = useRouter();
   const [modelParsed, setModelParsed] = useState<
@@ -196,10 +196,10 @@ export default function MainAppPage() {
 
                 <Button
                   type="submit"
-                  className={`w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3 ${mutation.isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                  disabled={mutation.isLoading}
+                  className={`w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3 ${mutation.isPending ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  disabled={mutation.isPending}
                 >
-                  {mutation.isLoading ? "Analyzing..." : "Analyze Citations"}
+                  {mutation.isPending ? "Analyzing..." : "Analyze Citations"}
                 </Button>
 
                 <div className="grid gap-4 md:grid-cols-2">
