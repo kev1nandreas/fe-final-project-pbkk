@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { MAIN_ENDPOINT } from "../main/endpoint";
-import { get, post } from "../main/call";
+import { get, upload } from "../main/call";
 import {
   typecastModelsResponse,
   typecastReferencesResponse,
@@ -55,7 +55,7 @@ export const useAddReferences = ({
 }) => {
   return useMutation({
     mutationFn: async (body: FormData) => {
-      const { Kind, OK } = await post(
+      const { Kind, OK } = await upload(
         MAIN_ENDPOINT.Processing.UploadReferences,
         body
       );

@@ -1,9 +1,9 @@
 export type LLMRequestData = {
     document?: FileList;
-    paragraph?: string;
-    similarityThreshold: number;
-    citationStrategy: string;
-    selectedReferences: string[];
+    query_text?: string;
+    similarity_threshold: number;
+    citation_strategy?: string | undefined;
+    reference_sources: string[];
 };
 
 export type ReferenceUploadData = {

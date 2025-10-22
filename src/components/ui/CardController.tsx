@@ -1,16 +1,16 @@
 "use client";
 
-type BaseProps<T> = {
+type BaseProps = {
   id: string;
   title: string;
   description?: string;
   helperText?: string;
   disabled?: boolean;
   className?: string;
-  value: T;
+  value: string | number;
 };
 
-type RangeControllerProps = BaseProps<number> & {
+type RangeControllerProps = BaseProps & {
   type: "range";
   min?: number;
   max?: number;
@@ -24,7 +24,7 @@ type SelectOption = {
   label: string;
 };
 
-type SelectControllerProps = BaseProps<string> & {
+type SelectControllerProps = BaseProps & {
   type: "select";
   onChange: (value: string) => void;
   options: SelectOption[];
@@ -50,7 +50,7 @@ export default function CardController(props: CardControllerProps) {
   const renderSummaryValue = () => {
     if (props.type === "range") {
       const unit = props.unit ?? "";
-      return `${props.value}${unit}`;
+      return `${Number(props.value) * 100}${unit}`;
     }
 
     const selectedLabel = props.options.find(
@@ -83,8 +83,8 @@ export default function CardController(props: CardControllerProps) {
               name={id}
               type="range"
               min={props.min ?? 0}
-              max={props.max ?? 100}
-              step={props.step ?? 1}
+              max={props.max ?? 1}
+              step={props.step ?? 0.05}
               value={props.value}
               disabled={disabled}
               onChange={(event) => props.onChange(Number(event.target.value))}
@@ -92,11 +92,11 @@ export default function CardController(props: CardControllerProps) {
             />
             <div className="mt-2 flex justify-between text-xs text-gray-500">
               <span>
-                {props.min ?? 0}
+                {props.min ? props.min * 100 : 0}
                 {props.unit ?? ""}
               </span>
               <span>
-                {props.max ?? 100}
+                {props.max ? props.max * 100 : 100}
                 {props.unit ?? ""}
               </span>
             </div>
