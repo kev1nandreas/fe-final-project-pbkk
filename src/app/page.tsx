@@ -8,12 +8,18 @@ import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
 import ReferenceDatabase from "@/components/ui/ReferenceDatabase";
 import CardController from "@/components/ui/CardController";
-import { useFetchModels, useFetchReferences } from "@/services/api/hook/useInfo";
-
+import {
+  useFetchModels,
+  useFetchReferences,
+} from "@/services/api/hook/useInfo";
+import { useSearchReferences } from "@/services/api/hook/useAI";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function MainAppPage() {
   const { data: referenceList, isLoading } = useFetchReferences();
   const { data: modelList } = useFetchModels();
+  const router = useRouter();
   const [modelParsed, setModelParsed] = useState<
     { value: string; label: string }[]
   >([]);
@@ -34,10 +40,10 @@ export default function MainAppPage() {
 
   const createDefaultValues = (): LLMRequestData => ({
     document: undefined,
-    paragraph: "",
-    similarityThreshold: 75,
-    citationStrategy: "LLaMA 2",
-    selectedReferences: [],
+    query_text: "",
+    similarity_threshold: 0.75,
+    citation_strategy: "gemini-2.5-flash",
+    reference_sources: [],
   });
 
   const methods = useForm<LLMRequestData>({
@@ -46,9 +52,9 @@ export default function MainAppPage() {
 
   const [isUploadDocument, setIsUploadDocument] = useState(true);
   const [isUploadText, setIsUploadText] = useState(false);
-  const selectedReferenceIds = methods.watch("selectedReferences", []);
-  const similarityThreshold = methods.watch("similarityThreshold", 75);
-  const citationStrategy = methods.watch("citationStrategy", "balanced");
+  const selectedReferenceIds = methods.watch("reference_sources", []);
+  const similarityThreshold = methods.watch("similarity_threshold", 75);
+  const citationStrategy = methods.watch("citation_strategy", "balanced");
   const headerTitle = isUploadDocument
     ? "Upload Your Document"
     : "Enter Your Text";
@@ -68,14 +74,25 @@ export default function MainAppPage() {
     methods.reset(createDefaultValues());
   };
 
-  const onSubmit: SubmitHandler<LLMRequestData> = (data) => {
-    console.log("Submitting document for analysis...", data);
+  const mutation = useSearchReferences({
+    onSuccess: (data) => {
+      toast.success("Text submitted for analysis");
+      methods.reset();
+      router.push("/result/" + data.data.id);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const onSubmit: SubmitHandler<LLMRequestData> = async (data) => {
+    await mutation.mutateAsync(data);
   };
 
   useEffect(() => {
-    methods.register("similarityThreshold");
-    methods.register("citationStrategy");
-    methods.register("selectedReferences");
+    methods.register("similarity_threshold");
+    methods.register("citation_strategy");
+    methods.register("reference_sources");
   }, [methods]);
 
   return (
@@ -157,11 +174,11 @@ export default function MainAppPage() {
                 {isUploadText && (
                   <div>
                     <textarea
-                      id="paragraph"
+                      id="query_text"
                       rows={8}
                       placeholder="Paste your academic text here for citation analysis..."
                       className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm h-[12rem] border border-black/30 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-all duration-200"
-                      {...methods.register("paragraph", {
+                      {...methods.register("query_text", {
                         required: "Please enter some text to analyze",
                         minLength: {
                           value: 10,
@@ -169,9 +186,9 @@ export default function MainAppPage() {
                         },
                       })}
                     />
-                    {methods.formState.errors.paragraph && (
+                    {methods.formState.errors.query_text && (
                       <p className="mt-2 text-sm text-red-600">
-                        {methods.formState.errors.paragraph.message}
+                        {methods.formState.errors.query_text.message}
                       </p>
                     )}
                   </div>
@@ -179,25 +196,26 @@ export default function MainAppPage() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3"
+                  className={`w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3 ${mutation.isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  disabled={mutation.isLoading}
                 >
-                  Analyze Citations
+                  {mutation.isLoading ? "Analyzing..." : "Analyze Citations"}
                 </Button>
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <CardController
-                    id="similarity-threshold"
+                    id="similarity_threshold"
                     type="range"
                     title="Similarity Threshold"
                     description="Set the minimum match percentage before a citation is flagged."
                     helperText="Higher values demand closer matches."
-                    min={50}
-                    max={100}
-                    step={1}
+                    min={0.5}
+                    max={1}
+                    step={0.05}
                     unit="%"
                     value={similarityThreshold}
                     onChange={(value) =>
-                      methods.setValue("similarityThreshold", value, {
+                      methods.setValue("similarity_threshold", value, {
                         shouldDirty: true,
                         shouldTouch: true,
                       })
@@ -208,9 +226,9 @@ export default function MainAppPage() {
                     type="select"
                     title="Model Selection"
                     description="Choose what model to use for citation analysis."
-                    value={citationStrategy}
+                    value={citationStrategy || "gemini-2.5-flash"}
                     onChange={(value) =>
-                      methods.setValue("citationStrategy", value, {
+                      methods.setValue("citation_strategy", value, {
                         shouldDirty: true,
                         shouldTouch: true,
                       })
@@ -223,7 +241,7 @@ export default function MainAppPage() {
                   catalog={referenceList || []}
                   selectedIds={selectedReferenceIds}
                   onSelectionChange={(ids) =>
-                    methods.setValue("selectedReferences", ids, {
+                    methods.setValue("reference_sources", ids, {
                       shouldDirty: true,
                       shouldTouch: true,
                     })
