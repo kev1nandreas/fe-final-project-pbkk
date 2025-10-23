@@ -1,29 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "motion/react";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import History from "@/components/ui/History";
-
-const history = [
-  {
-    id: 1,
-    usedAt: "2025-10-10 14:23",
-    title: "Deep Learning for Natural Language Processing",
-  },
-  {
-    id: 2,
-    usedAt: "2025-10-09 09:15",
-    title: "Citation Analysis in Academic Research",
-  },
-  {
-    id: 3,
-    usedAt: "2025-10-08 17:42",
-    title: "Efficient Document Embedding Methods",
-  },
-];
+import { useFetchHistory } from "@/services/api/hook/useAI";
+import { HistoryResponse } from "@/types/response";
 
 export default function HistoryPage() {
-  const [historyList] = useState(history);
+  const { data: historyList, isLoading } = useFetchHistory();
+  const itemsPerPage = 5;
+  const histories = useMemo<HistoryResponse[]>(
+    () => historyList ?? [],
+    [historyList]
+  );
+  const totalItems = histories.length;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    if (totalItems === 0) {
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+      return;
+    }
+
+    const maxPage = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage);
+    }
+  }, [totalItems, currentPage, itemsPerPage]);
+
+  const paginatedHistory = useMemo(() => {
+    if (histories.length === 0) {
+      return [] as HistoryResponse[];
+    }
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return histories.slice(startIndex, startIndex + itemsPerPage);
+  }, [histories, currentPage, itemsPerPage]);
+
+  const showingFrom = totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const showingTo = totalItems === 0
+    ? 0
+    : Math.min(showingFrom + paginatedHistory.length - 1, totalItems);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
+        <div className="animate-spin rounded-full border-t-4 border-blue-500 border-solid h-12 w-12"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
@@ -56,12 +85,50 @@ export default function HistoryPage() {
 
         {/* History List */}
         <div className="space-y-6">
-          {historyList.length === 0 ? (
+          {totalItems === 0 ? (
             <div className="text-center text-gray-500 py-8">
               No history found.
             </div>
           ) : (
-            historyList.map((item) => <History key={item.id} item={item} />)
+            <>
+              {paginatedHistory.map((item: HistoryResponse) => (
+                <History key={item.id} item={item} />
+              ))}
+
+              <div className="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                <span className="text-sm text-gray-500">
+                  Showing {showingFrom}–{showingTo} of {totalItems}
+                </span>
+                <Stack spacing={2} className="self-end md:self-auto">
+                  <Pagination
+                    count={Math.max(1, Math.ceil(totalItems / itemsPerPage))}
+                    page={currentPage}
+                    onChange={(_, value) => setCurrentPage(value)}
+                    siblingCount={1}
+                    boundaryCount={1}
+                    color="primary"
+                    shape="rounded"
+                    sx={{
+                      "& .MuiPagination-ul": { gap: "0.25rem" },
+                      "& .MuiPaginationItem-root": {
+                        color: "#1F2937",
+                        borderColor: "#BFDBFE",
+                        backgroundColor: "rgba(255, 255, 255, 0.85)",
+                        fontWeight: 500,
+                      },
+                      "& .MuiPaginationItem-root:hover": {
+                        backgroundColor: "rgba(59, 130, 246, 0.12)",
+                      },
+                      "& .Mui-selected": {
+                        backgroundColor: "#2563EB !important",
+                        color: "#ffffff",
+                        borderColor: "#2563EB",
+                      },
+                    }}
+                  />
+                </Stack>
+              </div>
+            </>
           )}
         </div>
       </motion.div>

@@ -47,3 +47,22 @@ export const useFetchHistoryById = (
     queryKey: ["fetch.history.by.id", id],
   }) as any;
 };
+
+export const useFetchHistory = (
+  onSuccess?: () => void,
+  onError?: () => void
+) => {
+  return useQuery({
+    queryFn: async () => {
+      const { Kind, OK } = await get(MAIN_ENDPOINT.Info.History);
+      if (!OK) {
+        throw new Error(
+          (Kind as { message: string }).message ||
+            (Kind as { Message: string }).Message
+        );
+      }
+      return (Kind as any).data;
+    },
+    queryKey: ["fetch.history"],
+  }) as any;
+};
