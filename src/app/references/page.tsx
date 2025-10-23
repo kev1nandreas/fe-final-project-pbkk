@@ -42,7 +42,7 @@ export default function ReferencesPage() {
 
   const methods = useForm<ReferenceUploadData>({
     defaultValues: {
-      model_name: modelParsed[0]?.value
+      model_name: "gemini-2.5-flash"
     }
   });
 
@@ -210,9 +210,9 @@ export default function ReferencesPage() {
                 <Upload
                   key={uploadResetKey}
                   id="files"
-                  accept=".pdf,.doc,.docx,.txt"
+                  accept=".pdf"
                   multiple
-                  maxSize={20}
+                  maxSize={10}
                   placeholder="Drag and drop documents or click to browse"
                   disabled={isUploading}
                   validation={{
