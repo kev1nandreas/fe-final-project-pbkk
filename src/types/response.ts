@@ -58,3 +58,9 @@ export function typecastHistoryByIdResponse(
 ): HistoryResponse | undefined {
   return data as HistoryResponse | undefined;
 }
+
+export function typecastHistoryResponse(
+  data: unknown
+): HistoryResponse[] | undefined {
+  return data as HistoryResponse[] | undefined;
+}
