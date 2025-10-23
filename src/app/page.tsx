@@ -40,7 +40,7 @@ export default function MainAppPage() {
 
   const createDefaultValues = (): LLMRequestData => ({
     document: undefined,
-    query_text: "",
+    query_text: "Gemini 1.0, our initial release, is available in three variants: Ultra, designed for handling highly complex tasks; Pro, optimized for strong performance and large-scale deployment; and Nano, built for on-device use. Each variant is carefully crafted to meet distinct computational needs and application demands.",
     similarity_threshold: 0.75,
     citation_strategy: "gemini-2.5-flash",
     reference_sources: [],
