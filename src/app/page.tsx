@@ -3,7 +3,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { LLMRequestData } from "@/types/request";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import {
+  FormProvider,
+  SubmitErrorHandler,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
 import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
 import ReferenceDatabase from "@/components/ui/ReferenceDatabase";
@@ -86,13 +91,32 @@ export default function MainAppPage() {
   });
 
   const onSubmit: SubmitHandler<LLMRequestData> = async (data) => {
+    if (!data.reference_sources || data.reference_sources.length === 0) {
+      toast.error("Select at least one reference source before submitting.");
+      return;
+    }
+
     await mutation.mutateAsync(data);
+  };
+
+  const onError: SubmitErrorHandler<LLMRequestData> = (errors) => {
+    if (errors.reference_sources) {
+      toast.error(
+        errors.reference_sources.message ||
+          "Select at least one reference source before submitting."
+      );
+    }
   };
 
   useEffect(() => {
     methods.register("similarity_threshold");
     methods.register("citation_strategy");
-    methods.register("reference_sources");
+    methods.register("reference_sources", {
+      validate: (value) =>
+        Array.isArray(value) && value.length > 0
+          ? true
+          : "Select at least one reference source before submitting.",
+    });
   }, [methods]);
 
   return (
@@ -153,7 +177,7 @@ export default function MainAppPage() {
 
             <FormProvider {...methods}>
               <form
-                onSubmit={methods.handleSubmit(onSubmit)}
+                onSubmit={methods.handleSubmit(onSubmit, onError)}
                 className="space-y-6"
               >
                 {isUploadDocument && (
@@ -240,13 +264,23 @@ export default function MainAppPage() {
                 <ReferenceDatabase
                   catalog={referenceList || []}
                   selectedIds={selectedReferenceIds}
-                  onSelectionChange={(ids) =>
+                  onSelectionChange={(ids) => {
                     methods.setValue("reference_sources", ids, {
                       shouldDirty: true,
                       shouldTouch: true,
-                    })
-                  }
+                      shouldValidate: true,
+                    });
+
+                    if (ids.length > 0) {
+                      methods.clearErrors("reference_sources");
+                    }
+                  }}
                 />
+                {methods.formState.errors.reference_sources && (
+                  <p className="mt-2 text-sm text-red-600">
+                    {methods.formState.errors.reference_sources.message}
+                  </p>
+                )}
               </form>
             </FormProvider>
           </div>
