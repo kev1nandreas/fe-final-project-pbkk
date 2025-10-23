@@ -50,8 +50,8 @@ export default function MainAppPage() {
     defaultValues: createDefaultValues(),
   });
 
-  const [isUploadDocument, setIsUploadDocument] = useState(true);
-  const [isUploadText, setIsUploadText] = useState(false);
+  const [isUploadDocument] = useState(false);
+  const [isUploadText] = useState(true);
   const selectedReferenceIds = methods.watch("reference_sources", []);
   const similarityThreshold = methods.watch("similarity_threshold", 75);
   const citationStrategy = methods.watch("citation_strategy", "balanced");
@@ -62,17 +62,17 @@ export default function MainAppPage() {
     ? "Upload your academic paper for citation analysis"
     : "Paste your paragraph or text for citation analysis";
 
-  const onClickDocument = () => {
-    setIsUploadDocument(true);
-    setIsUploadText(false);
-    methods.reset(createDefaultValues());
-  };
+  // const onClickDocument = () => {
+  //   setIsUploadDocument(true);
+  //   setIsUploadText(false);
+  //   methods.reset(createDefaultValues());
+  // };
 
-  const onClickText = () => {
-    setIsUploadDocument(false);
-    setIsUploadText(true);
-    methods.reset(createDefaultValues());
-  };
+  // const onClickText = () => {
+  //   setIsUploadDocument(false);
+  //   setIsUploadText(true);
+  //   methods.reset(createDefaultValues());
+  // };
 
   const mutation = useSearchReferences({
     onSuccess: (data) => {
@@ -130,7 +130,7 @@ export default function MainAppPage() {
           </div>
 
           <div className="relative z-10 space-y-6">
-            <div className="flex gap-4 justify-center items-center">
+            {/* <div className="flex gap-4 justify-center items-center">
               <Button
                 type="button"
                 className={`${
@@ -149,7 +149,7 @@ export default function MainAppPage() {
               >
                 Text
               </Button>
-            </div>
+            </div> */}
 
             <FormProvider {...methods}>
               <form
