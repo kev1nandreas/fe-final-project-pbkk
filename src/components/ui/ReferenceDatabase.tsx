@@ -120,11 +120,11 @@ export default function ReferenceDatabase({
                       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                         <div className="flex-1">
                           <h4 className="text-base font-semibold text-gray-900">
-                            {entry.paper_title}
+                            {entry.paper_title.replace(/_/g, " ")}
                           </h4>
                           {entry.model_name && (
                             <p className="text-sm text-gray-600">
-                              {entry.model_name}
+                              {entry.model_name.replace(/_/g, " ")}
                             </p>
                           )}
                         </div>
