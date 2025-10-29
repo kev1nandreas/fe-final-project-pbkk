@@ -11,3 +11,4 @@ NEXT_PUBLIC_BASE_API_URL="Backend API URL"
 ```bash
 npm run dev
 ```
+.
