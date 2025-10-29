@@ -25,7 +25,9 @@ export default function ReferencesList({ items }: { items: ReferenceItem[] }) {
       <ul className="space-y-3">
         {items.map((ref, i) => (
           <li key={ref.id ?? `${i}-${ref.title}`} className="text-sm text-gray-800">
-            <div className="font-medium">{ref.title || ref.raw}</div>
+            <div className="font-medium">
+              {(ref.title || ref.raw || "").replace(/_/g, " ")}
+            </div>
             {ref.authors && <div className="text-xs text-gray-500">{ref.authors}</div>}
             {ref.year && <div className="text-xs text-gray-500">{ref.year}</div>}
           </li>
