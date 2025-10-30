@@ -32,23 +32,27 @@ export default function MainAppPage() {
   useEffect(() => {
     if (modelList) {
       const formattedModels: { value: string; label: string }[] = [];
-      modelList.ollama.concat(modelList.gemini).forEach((model: string) => {
-        formattedModels.push({
-          value: model,
-          label:
-            model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
-        });
-      });
+      modelList.ollama
+        .concat(modelList.google.concat(modelList.senopati))
+        .forEach((model: string) =>
+          formattedModels.push({
+            value: model,
+            label:
+              model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
+          }),
+        );
       setModelParsed(formattedModels);
     }
   }, [modelList]);
 
   const createDefaultValues = (): LLMRequestData => ({
     document: undefined,
-    query_text: "Gemini 1.0, our initial release, is available in three variants: Ultra, designed for handling highly complex tasks; Pro, optimized for strong performance and large-scale deployment; and Nano, built for on-device use. Each variant is carefully crafted to meet distinct computational needs and application demands.",
+    query_text:
+      "Gemini 1.0, our initial release, is available in three variants: Ultra, designed for handling highly complex tasks; Pro, optimized for strong performance and large-scale deployment; and Nano, built for on-device use. Each variant is carefully crafted to meet distinct computational needs and application demands.",
     similarity_threshold: 0.75,
     citation_strategy: "gemini-2.5-flash",
     reference_sources: [],
+    provider: "senopati",
   });
 
   const methods = useForm<LLMRequestData>({
@@ -96,6 +100,13 @@ export default function MainAppPage() {
       return;
     }
 
+    data.provider =
+      Object.keys(modelList || {}).find((key) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const models = (modelList as any)[key] as string[];
+        return models.includes(data.citation_strategy || "");
+      }) || "senopati";
+    
     await mutation.mutateAsync(data);
   };
 
@@ -103,7 +114,7 @@ export default function MainAppPage() {
     if (errors.reference_sources) {
       toast.error(
         errors.reference_sources.message ||
-          "Select at least one reference source before submitting."
+          "Select at least one reference source before submitting.",
       );
     }
   };
@@ -199,7 +210,7 @@ export default function MainAppPage() {
 
                 <Button
                   type="submit"
-                  className={`w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3 ${mutation.isPending ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  className={`w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-medium transform transition-all ease-in-out duration-400 px-6 py-3 ${mutation.isPending ? "opacity-70 cursor-not-allowed" : ""}`}
                   disabled={mutation.isPending}
                 >
                   {mutation.isPending ? "Analyzing..." : "Analyze Citations"}
