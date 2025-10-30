@@ -89,6 +89,7 @@ export default function UploadModal({
 
     const formData = new FormData();
     formData.append("model_name", data.model_name);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const provider = Object.entries(providerDict).find(([_, models]) =>
       models.includes(data.model_name)
     )?.[0] || "unknown";

@@ -4,6 +4,7 @@ export type LLMRequestData = {
     similarity_threshold: number;
     citation_strategy?: string | undefined;
     reference_sources: string[];
+    provider: string;
 };
 
 export type ReferenceUploadData = {
