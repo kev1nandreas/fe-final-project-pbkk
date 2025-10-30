@@ -19,6 +19,14 @@ export default function UploadModal({
   showBackdrop = false, // Default to false
 }: UploadModalProps) {
   const { data: modelList } = useFetchModels();
+  const providerDict: Record<string, string[]> = (() => {
+    if (!modelList || typeof modelList !== "object") return {};
+    return Object.entries(modelList).reduce<Record<string, string[]>>((acc, [key, value]) => {
+      acc[key] = Array.isArray(value) ? value : [];
+      return acc;
+    }, {});
+  })();
+  // console.log(providerDict);
   const [uploadKey, setUploadKey] = useState(0);
   
   const methods = useForm<ReferenceUploadData>({
@@ -32,7 +40,7 @@ export default function UploadModal({
 
   // Parse model options
   const modelOptions = modelList
-    ? modelList.ollama.concat(modelList.gemini.concat(modelList.senopati)).map((model: string) => ({
+    ? modelList.ollama.concat(modelList.google.concat(modelList.senopati)).map((model: string) => ({
         value: model,
         label: model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
       }))
@@ -81,6 +89,11 @@ export default function UploadModal({
 
     const formData = new FormData();
     formData.append("model_name", data.model_name);
+    const provider = Object.entries(providerDict).find(([_, models]) =>
+      models.includes(data.model_name)
+    )?.[0] || "unknown";
+    formData.append("provider", provider);
+    // console.log("Uploading with provider:", provider);
     Array.from(data.files).forEach((file) => formData.append("files", file));
 
     await mutation.mutateAsync(formData);

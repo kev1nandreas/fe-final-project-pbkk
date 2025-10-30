@@ -9,4 +9,5 @@ export type LLMRequestData = {
 export type ReferenceUploadData = {
     files: FileList;
     model_name: string;
+    provider: string;
 };
