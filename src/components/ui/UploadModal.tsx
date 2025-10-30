@@ -32,7 +32,7 @@ export default function UploadModal({
 
   // Parse model options
   const modelOptions = modelList
-    ? modelList.ollama.concat(modelList.gemini).map((model: string) => ({
+    ? modelList.ollama.concat(modelList.gemini.concat(modelList.senopati)).map((model: string) => ({
         value: model,
         label: model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
       }))
