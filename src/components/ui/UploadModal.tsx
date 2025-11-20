@@ -21,14 +21,18 @@ export default function UploadModal({
   const { data: modelList } = useFetchModels();
   const providerDict: Record<string, string[]> = (() => {
     if (!modelList || typeof modelList !== "object") return {};
-    return Object.entries(modelList).reduce<Record<string, string[]>>((acc, [key, value]) => {
-      acc[key] = Array.isArray(value) ? value : [];
-      return acc;
-    }, {});
+    return Object.entries(modelList).reduce<Record<string, string[]>>(
+      (acc, [key, value]) => {
+        acc[key] = Array.isArray(value) ? value : [];
+        return acc;
+      },
+      {},
+    );
   })();
   // console.log(providerDict);
   const [uploadKey, setUploadKey] = useState(0);
-  
+  const [isSuccess, setIsSuccess] = useState("not_started");
+
   const methods = useForm<ReferenceUploadData>({
     defaultValues: {
       model_name: "gemini-2.5-flash",
@@ -40,10 +44,13 @@ export default function UploadModal({
 
   // Parse model options
   const modelOptions = modelList
-    ? modelList.ollama.concat(modelList.google.concat(modelList.senopati)).map((model: string) => ({
-        value: model,
-        label: model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
-      }))
+    ? modelList.ollama
+        .concat(modelList.google.concat(modelList.senopati))
+        .map((model: string) => ({
+          value: model,
+          label:
+            model.charAt(0).toUpperCase() + model.slice(1).replace(/-/g, " "),
+        }))
     : [];
 
   useEffect(() => {
@@ -64,11 +71,18 @@ export default function UploadModal({
         model_name: "gemini-2.5-flash",
         files: undefined,
       });
-      setUploadKey(prev => prev + 1);
-      handleClose();
+      setUploadKey((prev) => prev + 1);
+      console.log("Closing modal in 5 seconds...");
+
+      setTimeout(() => {
+        handleClose();
+        setIsSuccess("not_started");
+        console.log("Modal closed.");
+      }, 5000);
     },
     onError: (error) => {
       toast.error(error.message);
+      setIsSuccess("not_started");
     },
   });
 
@@ -90,13 +104,15 @@ export default function UploadModal({
     const formData = new FormData();
     formData.append("model_name", data.model_name);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const provider = Object.entries(providerDict).find(([_, models]) =>
-      models.includes(data.model_name)
-    )?.[0] || "unknown";
+    const provider =
+      Object.entries(providerDict).find(([_, models]) =>
+        models.includes(data.model_name),
+      )?.[0] || "unknown";
     formData.append("provider", provider);
     // console.log("Uploading with provider:", provider);
     Array.from(data.files).forEach((file) => formData.append("files", file));
 
+    setIsSuccess("uploading");
     await mutation.mutateAsync(formData);
   };
 
@@ -128,7 +144,10 @@ export default function UploadModal({
       </p>
 
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(handleSubmit)} className="space-y-5">
+        <form
+          onSubmit={methods.handleSubmit(handleSubmit)}
+          className="space-y-5"
+        >
           <CardController
             id="model_name"
             type="select"
@@ -193,14 +212,16 @@ export default function UploadModal({
         </form>
       </FormProvider>
 
-      {mutation.isPending && (
+      {isSuccess === "uploading" && (
         <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-white/70 backdrop-blur-sm">
           <div className="w-full max-w-xs">
             <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
-              <div className="h-full w-full animate-pulse bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500"></div>
+              <div
+                className={`h-full ${isSuccess === "uploading" ? "w-[30%] animate-pulse" : "w-full"} bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 transition-all duration-1000 ease-in-out`}
+              ></div>
             </div>
             <p className="mt-3 text-center text-sm font-medium text-gray-700">
-              Uploading references…
+              {isSuccess ? "Upload complete!" : "Uploading references…"}
             </p>
           </div>
         </div>
@@ -210,8 +231,8 @@ export default function UploadModal({
 
   return (
     <AnimatePresence>
-      {isOpen && (
-        showBackdrop ? (
+      {isOpen &&
+        (showBackdrop ? (
           // With backdrop (for modal usage)
           <motion.div
             initial={{ opacity: 0 }}
@@ -224,8 +245,7 @@ export default function UploadModal({
         ) : (
           // Without backdrop (for page usage)
           modalContent
-        )
-      )}
+        ))}
     </AnimatePresence>
   );
 }

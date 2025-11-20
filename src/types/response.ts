@@ -14,12 +14,6 @@ export type ResponseMeta<T> = {
   };
 };
 
-export interface ReferencesResponse {
-  original_filename: string;
-  paper_title: string;
-  model_name: string;
-}
-
 export interface ModelsResponse {
   ollama: string[];
   gemini: string[];
@@ -43,8 +37,8 @@ export interface HistoryListItem {
 
 export function typecastReferencesResponse(
   data: unknown
-): ReferencesResponse[] | undefined {
-  return data as ReferencesResponse[] | undefined;
+): string[] | undefined {
+  return data as string[] | undefined;
 }
 
 export function typecastModelsResponse(
