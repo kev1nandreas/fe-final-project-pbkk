@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Button from "@/components/ui/Button";
 import References from "@/components/ui/References";
-import { ReferencesResponse } from "@/types/response";
 import { useFetchReferences } from "@/services/api/hook/useInfo";
 import UploadModal from "@/components/ui/UploadModal";
 import { useState } from "react";
@@ -75,11 +74,9 @@ export default function ReferencesPage() {
                 No references have been uploaded yet.
               </p>
             ) : (
-              referenceList.map(
-                (reference: ReferencesResponse, index: number) => (
-                  <References key={index} reference={reference} />
-                )
-              )
+              referenceList.map((reference: string, index: number) => (
+                <References key={index} reference={reference} />
+              ))
             )}
           </div>
         </div>

@@ -5,24 +5,20 @@ import { useEffect, useState } from "react";
 import { LLMRequestData } from "@/types/request";
 import {
   FormProvider,
-  SubmitErrorHandler,
   SubmitHandler,
   useForm,
 } from "react-hook-form";
 import Button from "@/components/ui/Button";
 import Upload from "@/components/ui/Upload";
-import ReferenceDatabase from "@/components/ui/ReferenceDatabase";
 import CardController from "@/components/ui/CardController";
 import {
   useFetchModels,
-  useFetchReferences,
 } from "@/services/api/hook/useInfo";
 import { useSearchReferences } from "@/services/api/hook/useAI";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export default function MainAppPage() {
-  const { data: referenceList } = useFetchReferences();
   const { data: modelList } = useFetchModels();
   const router = useRouter();
   const [modelParsed, setModelParsed] = useState<
@@ -51,7 +47,6 @@ export default function MainAppPage() {
       "Gemini 1.0, our initial release, is available in three variants: Ultra, designed for handling highly complex tasks; Pro, optimized for strong performance and large-scale deployment; and Nano, built for on-device use. Each variant is carefully crafted to meet distinct computational needs and application demands.",
     similarity_threshold: 0.75,
     citation_strategy: "gemini-2.5-flash",
-    reference_sources: [],
     provider: "senopati",
   });
 
@@ -61,7 +56,6 @@ export default function MainAppPage() {
 
   const [isUploadDocument] = useState(false);
   const [isUploadText] = useState(true);
-  const selectedReferenceIds = methods.watch("reference_sources", []);
   const similarityThreshold = methods.watch("similarity_threshold", 75);
   const citationStrategy = methods.watch("citation_strategy", "balanced");
   const headerTitle = isUploadDocument
@@ -95,11 +89,6 @@ export default function MainAppPage() {
   });
 
   const onSubmit: SubmitHandler<LLMRequestData> = async (data) => {
-    if (!data.reference_sources || data.reference_sources.length === 0) {
-      toast.error("Select at least one reference source before submitting.");
-      return;
-    }
-
     data.provider =
       Object.keys(modelList || {}).find((key) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,24 +99,9 @@ export default function MainAppPage() {
     await mutation.mutateAsync(data);
   };
 
-  const onError: SubmitErrorHandler<LLMRequestData> = (errors) => {
-    if (errors.reference_sources) {
-      toast.error(
-        errors.reference_sources.message ||
-          "Select at least one reference source before submitting.",
-      );
-    }
-  };
-
   useEffect(() => {
     methods.register("similarity_threshold");
     methods.register("citation_strategy");
-    methods.register("reference_sources", {
-      validate: (value) =>
-        Array.isArray(value) && value.length > 0
-          ? true
-          : "Select at least one reference source before submitting.",
-    });
   }, [methods]);
 
   return (
@@ -167,7 +141,7 @@ export default function MainAppPage() {
           <div className="relative z-10 space-y-6">
             <FormProvider {...methods}>
               <form
-                onSubmit={methods.handleSubmit(onSubmit, onError)}
+                onSubmit={methods.handleSubmit(onSubmit)}
                 className="space-y-6"
               >
                 {isUploadDocument && (
@@ -251,7 +225,7 @@ export default function MainAppPage() {
                   />
                 </div>
 
-                <ReferenceDatabase
+                {/*<ReferenceDatabase
                   catalog={referenceList || []}
                   selectedIds={selectedReferenceIds}
                   onSelectionChange={(ids) => {
@@ -270,7 +244,7 @@ export default function MainAppPage() {
                   <p className="mt-2 text-sm text-red-600">
                     {methods.formState.errors.reference_sources.message}
                   </p>
-                )}
+                )}*/}
               </form>
             </FormProvider>
           </div>
