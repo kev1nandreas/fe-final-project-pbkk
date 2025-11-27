@@ -22,7 +22,7 @@ export default function UsagePlan() {
 					</p>
 				</div>
 
-				<div className="flex gap-6 lg:gap-8 max-w-7xl justify-center w-full">
+				<div className="flex flex-wrap gap-6 lg:gap-8 max-w-7xl justify-center w-full">
 					<UsagePlanCard
 						icon="📄"
 						header="Gunakan Referensi Anda"
