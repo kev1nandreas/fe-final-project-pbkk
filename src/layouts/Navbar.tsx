@@ -94,7 +94,7 @@ export default function Navbar() {
 						className="hidden md:inline-flex text-sm lg:text-base px-4 lg:px-6"
 						variant="blue"
 					>
-						<UnstyledLink href="/start">Mulai</UnstyledLink>
+						<UnstyledLink href="#get-started">Mulai Menggunakan</UnstyledLink>
 					</Button>
 
 					{/* Mobile Menu */}

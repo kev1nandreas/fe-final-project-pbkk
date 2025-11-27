@@ -34,7 +34,7 @@ export default function Hero() {
 							cardDistance={60}
 							verticalDistance={70}
 							delay={4000}
-							pauseOnHover={true}
+							pauseOnHover={false}
 						>
 							<Card customClass="bg-gradient-to-br from-blue-500 to-blue-700 shadow-xl">
 								<div className="flex flex-col items-center justify-center h-full text-white p-4 sm:p-6 md:p-8">
