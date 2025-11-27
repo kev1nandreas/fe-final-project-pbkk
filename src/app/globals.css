@@ -2,7 +2,7 @@
 @config "../../tailwind.config.ts";
 
 body {
-	background: #f5f1dc;
+	background: #ffffff;
 	color: #333333;
 	font-family: Arial, Helvetica, sans-serif;
 }

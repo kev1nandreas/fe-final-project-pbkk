@@ -2,13 +2,14 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import Button from "@/components/button/Button";
 import UnstyledLink from "@/components/links/UnstyledLink";
 import NextImage from "@/components/NextImage";
 
 const navLinks = [
 	{ href: "/", label: "Beranda" },
-	{ href: "/about", label: "Tentang Kami" },
-	{ href: "/gallery", label: "Galeri" },
+	{ href: "/history", label: "Histori" },
+	{ href: "/reference", label: "Referensi" },
 ];
 
 export default function Navbar() {
@@ -41,31 +42,31 @@ export default function Navbar() {
 	}, [isOpen]);
 
 	return (
-		<nav className="bg-white shadow-md w-full fixed z-50">
+		<nav className="bg-white/90 backdrop-blur-sm shadow-sm w-full fixed z-50">
 			<div className="px-4 sm:px-6 md:px-8 lg:px-[8%] mx-auto">
-				<div className="flex items-center justify-between h-20 max-md:h-16">
+				<div className="flex items-center justify-between h-16 md:h-20">
 					{/* Logo */}
 					<UnstyledLink
 						href={`/`}
 						className="flex items-center gap-2 max-md:gap-1"
 					>
 						<NextImage
-							width={552}
-							height={388}
-							src={"/next.svg"}
+							width={300}
+							height={300}
+							src={"/logo-citacheck.png"}
 							alt="Logo"
 							priority
 							serverStaticImg
-							className="flex max-w-[75px] items-center md:max-w-[100px]"
+							className="flex max-w-[30px] items-center md:max-w-[40px]"
 						/>
-						<p className="text-xl max-md:text-base max-lg:hidden max-md:block text-gray-900 font-semibold">
-							Next Template
+						<p className="text-lg sm:text-xl text-gray-900 font-semibold hidden sm:block">
+							CitaCheck
 						</p>
 					</UnstyledLink>
 
 					{/* Desktop Menu */}
-					<div className="hidden md:flex items-center space-x-8">
-						<div className="flex items-baseline space-x-6">
+					<div className="hidden md:flex items-center space-x-4 lg:space-x-8">
+						<div className="flex items-baseline space-x-4 lg:space-x-6">
 							{navLinks.map((link) => (
 								<UnstyledLink
 									href={link.href}
@@ -73,21 +74,28 @@ export default function Navbar() {
 									className="group relative cursor-pointer"
 								>
 									<p
-										className={`relative z-10 transition-all duration-300 ease-in-out ${
+										className={`relative z-10 transition-all duration-300 ease-in-out text-sm lg:text-base ${
 											isActive(link.href)
-												? "text-gray-700 font-bold"
-												: "hover:text-gray-700 text-gray-400"
+												? "text-blue-600 font-bold"
+												: "hover:text-blue-600 text-gray-600"
 										}`}
 									>
 										{link.label}
 									</p>
 									<span
-										className={`absolute bottom-0 h-[1px] bg-gray-700 rounded-full transition-all duration-300 ease-in-out left-1/2 w-0 group-hover:w-full group-hover:left-0`}
+										className={`absolute bottom-0 h-0.5 bg-blue-600 rounded-full transition-all duration-300 ease-in-out left-1/2 w-0 group-hover:w-full group-hover:left-0`}
 									></span>
 								</UnstyledLink>
 							))}
 						</div>
 					</div>
+
+					<Button
+						className="hidden md:inline-flex text-sm lg:text-base px-4 lg:px-6"
+						variant="blue"
+					>
+						<UnstyledLink href="/start">Mulai</UnstyledLink>
+					</Button>
 
 					{/* Mobile Menu */}
 					<div className="md:hidden">
@@ -95,7 +103,7 @@ export default function Navbar() {
 						<button
 							type="button"
 							onClick={() => setIsOpen(!isOpen)}
-							className="inline-flex items-center cursor-pointer justify-center rounded-md pt-1 text-primary-500 hover:text-primary-600 focus:outline-none focus:ring-inset focus:ring-white transition-colors duration-200"
+							className="inline-flex items-center cursor-pointer justify-center rounded-md text-gray-700 hover:text-blue-600 focus:outline-none transition-colors duration-200"
 							aria-expanded={isOpen}
 							aria-label="Toggle navigation menu"
 						>
@@ -149,8 +157,8 @@ export default function Navbar() {
 										href={link.href}
 										className={`block px-3 py-2 rounded-md text-base transition-colors duration-300 ${
 											isActive(link.href)
-												? "bg-primary-400 text-white font-semibold"
-												: "text-gray-400 hover:bg-primary-500 hover:text-white"
+												? "bg-blue-600 text-white font-semibold"
+												: "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
 										}`}
 										onClick={() => setIsOpen(false)}
 									>

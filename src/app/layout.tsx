@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import Head from "next/head";
 import Providers from "@/app/providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import Layout from "@/layouts/Layout";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -49,7 +50,11 @@ export default function RootLayout({
 			</Head>
 			{process.env.NEXT_PUBLIC_RUN_MODE === "production" && <GoogleAnalytics />}
 			<body className={`${inter.className}`}>
-				<Providers>{children}</Providers>
+				<Providers>
+					<Layout withFooter withNavbar>
+						{children}
+					</Layout>
+				</Providers>
 			</body>
 		</html>
 	);

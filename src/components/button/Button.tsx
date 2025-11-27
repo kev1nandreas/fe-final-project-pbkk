@@ -52,7 +52,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 					"inline-flex items-center cursor-pointer justify-center rounded-lg font-medium",
 					"focus:outline-none focus-visible:ring",
 					"shadow-sm",
-					"transition-colors duration-75",
+					"transition-colors duration-300",
 					//#region  //*=========== Size ===========
 					[
 						size === "lg" && [
@@ -60,7 +60,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 							"text-base",
 						],
 						size === "base" && [
-							"min-h-[2rem] px-3 md:min-h-[2.25rem]",
+							"min-h-[2rem] px-4 md:min-h-[2.5rem]",
 							"text-sm md:text-base",
 						],
 						size === "sm" && [
