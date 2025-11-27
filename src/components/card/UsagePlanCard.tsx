@@ -42,7 +42,7 @@ export default function UsagePlanCard({
 				}}
 				className="w-full cursor-pointer py-3 sm:py-4 px-6 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-md hover:shadow-xl bg-blue-600 text-white hover:bg-blue-700"
 			>
-				Pilih Paket
+				Pilih Penggunaan
 			</button>
 		</div>
 	);

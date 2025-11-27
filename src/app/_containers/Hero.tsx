@@ -1,28 +1,43 @@
+"use client";
+
 import CardSwap, { Card } from "@/components/card/CardSwap";
 import UnstyledLink from "@/components/links/UnstyledLink";
+import { useStaggerFadeIn } from "@/hooks/useGsapAnimation";
 
 export default function Hero() {
+	const heroTextRef = useStaggerFadeIn<HTMLDivElement>({
+		stagger: 0.15,
+		duration: 0.8,
+		yFrom: 30,
+		ease: "power3.out",
+	});
+
 	return (
 		<section id="hero" className="py-20">
 			<div className="mx-auto px-6 lg:px-[13%]">
 				<div className="flex flex-col lg:flex-row items-center gap-12">
 					{/* Left side - Text content */}
-					<div className="flex-1 mt-[5rem] text-center lg:text-left">
-						<h1 className="text-4xl lg:text-6xl font-bold mb-4">
+					<div
+						ref={heroTextRef}
+						className="hero-text flex-1 mt-20 text-center lg:text-left"
+					>
+						<h1 className="opacity-0 text-4xl lg:text-6xl font-bold mb-4">
 							<span className="bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
 								Cari Sitasi Untuk Teks Anda
 							</span>
 						</h1>
-						<p className="text-lg text-gray-700 mb-8 max-w-xl">
+						<p className="opacity-0 text-lg text-gray-700 mb-8 max-w-xl">
 							Masukkan teks dan dapatkan sitasi yang akurat dan relevan secara
 							instan dengan CitaCheck.
 						</p>
-						<UnstyledLink
-							href="#get-started"
-							className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition"
-						>
-							Mulai Menggunakan
-						</UnstyledLink>
+						<div className="opacity-0">
+							<UnstyledLink
+								href="#get-started"
+								className="inline-block bg-blue-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-blue-700 transition"
+							>
+								Mulai Menggunakan
+							</UnstyledLink>
+						</div>
 					</div>
 
 					{/* Right side - Card swap */}
