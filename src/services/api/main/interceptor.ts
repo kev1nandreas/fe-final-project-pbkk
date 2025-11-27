@@ -1,5 +1,5 @@
-import { ENV } from "@/configs/environment";
 import axios from "axios";
+import { ENV } from "@/configs/environment";
 
 const baseURL = ENV.URI.BASE_URL;
 const isServer = typeof window === "undefined";

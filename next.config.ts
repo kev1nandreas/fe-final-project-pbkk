@@ -1,12 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  assetPrefix: "/citation-checker",
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "50mb",
-    },
-  },
+	/* config options here */
 };
 
 export default nextConfig;

@@ -1,12 +1,6 @@
 export const MAIN_ENDPOINT = {
-	Info: {
-		Embeddings: "/info/embeddings",
-		Models: "/info/models",
-		History: "/info/history",
-		HistoryByID: "/info/history/id/:id"
+	Auth: {
+		Login: "/auth/login",
+		CurrentUser: "/auth/me",
 	},
-	Processing: {
-		Search: "/processing/search",
-		UploadReferences: "/processing/upload-and-process",
-	}
 };

@@ -4,7 +4,7 @@
 ```bash
 npm install
 ```
-create a `.env.local` file in the root directory and add the following environment variables:
+create a `.env` file in the root directory and add the following environment variables:
 ```
 NEXT_PUBLIC_BASE_API_URL="Backend API URL"
 ```

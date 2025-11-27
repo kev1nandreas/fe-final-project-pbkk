@@ -1,41 +1,56 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import QueryProvider from "@/modules/providers/query_provider";
-import { Toaster } from "react-hot-toast";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import Head from "next/head";
+import Providers from "@/app/providers";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+
+const siteConfig = {
+	title: "Citacheck",
+	description:
+		"CitaCheck is a fast and easy tool to verify information, check sources, and ensure content accuracy.",
+	url: process.env.SITE_URL || "https://example.com",
+};
 
 export const metadata: Metadata = {
-  title: "Citation Checker",
-  description: "A tool for checking citations",
+	metadataBase: new URL(siteConfig.url),
+	title: {
+		default: siteConfig.title,
+		template: `%s - ${siteConfig.title}`,
+	},
+	description: siteConfig.description,
+	twitter: {
+		card: "summary_large_image",
+	},
+	icons: {
+		icon: "/logo-citacheck.png",
+	},
+	robots: { index: true, follow: true },
+	authors: [
+		{
+			name: siteConfig.title,
+			url: siteConfig.url,
+		},
+	],
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <QueryProvider>
-          <Header />
-          <Toaster position="top-center" />
-          {children}
-        </QueryProvider>
-      </body>
-    </html>
-  );
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<html lang="en">
+			<Head>
+				<meta name="apple-mobile-web-app-title" content={siteConfig.title} />
+			</Head>
+			{process.env.NEXT_PUBLIC_RUN_MODE === "production" && <GoogleAnalytics />}
+			<body className={`${inter.className}`}>
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	);
 }
