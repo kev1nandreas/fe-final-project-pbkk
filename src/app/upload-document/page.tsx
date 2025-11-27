@@ -13,7 +13,7 @@ export default function UploadPage() {
   }, []);
 
   const handleClose = () => {
-    router.push("/analyze");
+    router.push("/citation-checker/analyze");
   };
 
   return (

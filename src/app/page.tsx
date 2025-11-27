@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 export default function Main() {
   return(
     <>
-      {redirect("/upload-document")}
+      {redirect("/citation-checker/upload-document")}
     </>
   )
 }

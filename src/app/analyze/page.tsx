@@ -81,7 +81,7 @@ export default function MainAppPage() {
     onSuccess: (data) => {
       toast.success("Text submitted for analysis");
       methods.reset();
-      router.push("/result/" + data.data.id);
+      router.push("/citation-checker/result/" + data.data.id);
     },
     onError: (error) => {
       toast.error(error.message);

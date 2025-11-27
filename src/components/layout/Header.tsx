@@ -31,12 +31,12 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2 group">
+            <Link href="/citation-checker" className="flex items-center space-x-2 group">
               <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-sm">CC</span>
               </div>
               <h1 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
-                Citation Checker
+                CitaCheck
               </h1>
             </Link>
           </div>
@@ -96,7 +96,7 @@ export default function Header() {
 }
 
 const menuItems = [
-  { name: "Home", href: "/" },
-  { name: "History", href: "/history" },
-  { name: "References", href: "/references" },
+  { name: "Home", href: "/citation-checker" },
+  { name: "History", href: "/citation-checker/history" },
+  { name: "References", href: "/citation-checker/references" },
 ];
