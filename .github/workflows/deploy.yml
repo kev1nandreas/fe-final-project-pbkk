@@ -2,7 +2,7 @@ name: CI/CD - CitaCheck Frontend Deploy
 
 on:
   push:
-    branches: ["production"]
+    branches: ["main"]
 
 jobs:
   build-and-push:
