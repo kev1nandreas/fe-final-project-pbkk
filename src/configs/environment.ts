@@ -1,7 +1,7 @@
 const isDevelopment = process.env.NEXT_PUBLIC_RUN_MODE === "development";
 
 export const ENV = {
-	MODE: process.env.NEXT_PUBLIC_MODE || "development",
+	MODE: process.env.NEXT_PUBLIC_RUN_MODE || "development",
 	TOKEN_KEY: process.env.NEXT_PUBLIC_TOKEN_KEY || "@example/token",
 	URI: {
 		BASE_URL: isDevelopment
