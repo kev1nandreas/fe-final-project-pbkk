@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import UploadFile from "@/components/form/UploadFile";
+import UnstyledLink from "@/components/links/UnstyledLink";
 import type { UploadModalProps } from "@/types/layout";
 import { useAddReferences } from "../_hooks/useAddReferences";
 
@@ -103,6 +104,11 @@ export default function UploadModal({
 					</div>
 
 					<div className="flex flex-col sm:flex-row justify-end gap-3">
+						<Button type="button" variant="outline" className="px-8 text-black">
+							<UnstyledLink href="/start?plan=without-citation">
+								Lewati langkah ini
+							</UnstyledLink>
+						</Button>
 						<Button type="submit" variant="blue" className="text-white px-8">
 							{mutation.isPending ? (
 								<span className="flex items-center gap-2">
