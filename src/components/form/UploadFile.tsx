@@ -170,7 +170,10 @@ export default function UploadFile({
 		disabled,
 	});
 	return (
-		<div className="w-full space-y-1.5 rounded-md" data-cy={`upload-${id}`}>
+		<div
+			className="w-full space-y-1.5 min-h-[5rem] rounded-md"
+			data-cy={`upload-${id}`}
+		>
 			{label && (
 				<LabelText required={!!validation?.required}>{label}</LabelText>
 			)}

@@ -5,3 +5,12 @@ export type LayoutProps = {
 	withNavbar: boolean;
 	withFooter: boolean;
 };
+
+export type UploadModalProps = {
+	isOpen: boolean;
+	isQueryOpen?: boolean;
+	onClose?: () => void;
+	allowSkip?: boolean;
+	skipHandler?: () => void;
+	showBackdrop?: boolean;
+};
