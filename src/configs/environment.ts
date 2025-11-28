@@ -1,4 +1,4 @@
-const isDevelopment = process.env.NODE_ENV === "development";
+const isDevelopment = process.env.NEXT_PUBLIC_RUN_MODE === "development";
 
 export const ENV = {
 	MODE: process.env.NEXT_PUBLIC_MODE || "development",
