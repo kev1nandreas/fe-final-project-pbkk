@@ -6,6 +6,7 @@ import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
 import UploadFile from "@/components/form/UploadFile";
 import UnstyledLink from "@/components/links/UnstyledLink";
+import { PATH } from "@/shared/path";
 import type { UploadModalProps } from "@/types/layout";
 import { useAddReferences } from "../_hooks/useAddReferences";
 
@@ -105,7 +106,7 @@ export default function UploadModal({
 
 					<div className="flex flex-col sm:flex-row justify-end gap-3">
 						<Button type="button" variant="outline" className="px-8 text-black">
-							<UnstyledLink href="/start?plan=without-citation">
+							<UnstyledLink href={`${PATH.START}?plan=without-citation`}>
 								Lewati langkah ini
 							</UnstyledLink>
 						</Button>

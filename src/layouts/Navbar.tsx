@@ -5,11 +5,12 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Button from "@/components/button/Button";
 import UnstyledLink from "@/components/links/UnstyledLink";
 import NextImage from "@/components/NextImage";
+import { PATH } from "@/shared/path";
 
 const navLinks = [
-	{ href: "/", label: "Beranda" },
-	{ href: "/history", label: "Histori" },
-	{ href: "/reference", label: "Referensi" },
+	{ href: PATH.HOME, label: "Beranda" },
+	{ href: PATH.HISTORY, label: "Histori" },
+	{ href: PATH.REFERENCES, label: "Referensi" },
 ];
 
 export default function Navbar() {
@@ -47,7 +48,7 @@ export default function Navbar() {
 				<div className="flex items-center justify-between h-16 md:h-20">
 					{/* Logo */}
 					<UnstyledLink
-						href={`/`}
+						href={PATH.HOME}
 						className="flex items-center gap-2 max-md:gap-1"
 					>
 						<NextImage
@@ -94,7 +95,9 @@ export default function Navbar() {
 						className="hidden md:inline-flex text-sm lg:text-base px-4 lg:px-6"
 						variant="blue"
 					>
-						<UnstyledLink href="/#get-started">Mulai Menggunakan</UnstyledLink>
+						<UnstyledLink href={`${PATH.HOME}/#get-started`}>
+							Mulai Menggunakan
+						</UnstyledLink>
 					</Button>
 
 					{/* Mobile Menu */}

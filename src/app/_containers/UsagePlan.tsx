@@ -2,6 +2,7 @@
 
 import UsagePlanCard from "@/components/card/UsagePlanCard";
 import { useStaggerFadeIn } from "@/hooks/useGsapAnimation";
+import { PATH } from "@/shared/path";
 
 export default function UsagePlan() {
 	const cardsRef = useStaggerFadeIn<HTMLDivElement>({
@@ -39,7 +40,7 @@ export default function UsagePlan() {
 							icon="📄"
 							header="Gunakan Referensi Anda"
 							description="Upload referensi Anda untuk mendapatkan sitasi yang akurat dan cepat dari dokumen Anda. Bantu juga kami meningkatkan database referensi kami!"
-							redirectUrl="start?plan=with-citation"
+							redirectUrl={`${PATH.START}?plan=with-citation`}
 						/>
 					</div>
 
@@ -48,7 +49,7 @@ export default function UsagePlan() {
 							icon="📝"
 							header="Gunakan Referensi Yang Tersedia"
 							description="Tahapan mudah untuk mendapatkan sitasi dari referensi yang sudah tersedia di database kami"
-							redirectUrl="start?plan=without-citation"
+							redirectUrl={`${PATH.START}?plan=without-citation`}
 						/>
 					</div>
 				</div>

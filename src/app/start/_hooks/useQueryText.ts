@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { post } from "@/services/api/main/call";
 import { MAIN_ENDPOINT } from "@/services/api/main/endpoint";
+import { PATH } from "@/shared/path";
 import type { LLMRequestData } from "@/types/search";
 
 export const useSearchReferences = ({
@@ -26,7 +27,7 @@ export const useSearchReferences = ({
 		mutationKey: ["search.references"],
 		onSuccess: (data: any) => {
 			toast.success("Pencarian referensi berhasil.");
-			router.push(`/results/${data.data.id}`);
+			router.push(`${PATH.RESULT}/${data.data.id}`);
 			onSuccess(data);
 		},
 		onError: (error: any) => {
