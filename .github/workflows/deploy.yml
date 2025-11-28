@@ -46,6 +46,19 @@ jobs:
     needs: build-and-push
 
     steps:
+      - name: Install OpenVPN
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openvpn
+
+      - name: Setup OpenVPN connection
+        run: |
+          printf "%s\n%s" "${{ secrets.OPENVPN_USERNAME }}" "${{ secrets.OPENVPN_PASSWORD }}" > vpn-auth.txt
+          chmod 600 vpn-auth.txt
+          echo "${{ secrets.OPENVPN_CONFIG_B64 }}" | base64 -d > vpn.ovpn
+          sudo openvpn --config vpn.ovpn --auth-user-pass vpn-auth.txt --daemon
+          sleep 10
+          
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
