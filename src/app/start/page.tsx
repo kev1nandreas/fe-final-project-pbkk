@@ -1,42 +1,12 @@
-"use client";
+import type { Metadata } from "next";
+import StartPageContainer from "./_containers/StartPageContainer";
 
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import QueryBox from "./_components/QueryBox";
-import UploadModal from "./_components/UploadModal";
+export const metadata: Metadata = {
+	title: "Mulai Menggunakan",
+	description:
+		"Mulai menggunakan AI Research Assistant untuk melakukan riset dengan lebih efisien.",
+};
 
 export default function UploadPage() {
-	const planParams = useSearchParams().get("plan");
-	const [isOpen, setIsOpen] = useState(false);
-	const [isQueryOpen, setIsOpenQuery] = useState(true);
-	const [isWithCitation, setIsWithCitation] = useState(false);
-
-	useEffect(() => {
-		if (planParams === "with-citation") {
-			setIsWithCitation(true);
-			setIsOpen(true);
-			setIsOpenQuery(false);
-		} else if (planParams === "without-citation") {
-			setIsWithCitation(false);
-			setIsOpenQuery(true);
-			setIsOpen(false);
-		}
-	}, [planParams]);
-
-	if (!isWithCitation)
-		return (
-			<div className="min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-				<QueryBox isOpen={true} />
-			</div>
-		);
-
-	return (
-		<div className="min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-			{isQueryOpen ? (
-				<QueryBox isOpen={isQueryOpen} />
-			) : (
-				<UploadModal isOpen={isOpen} onClose={() => setIsOpenQuery(true)} />
-			)}
-		</div>
-	);
+	return <StartPageContainer />;
 }
