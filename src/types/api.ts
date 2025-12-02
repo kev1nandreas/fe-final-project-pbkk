@@ -20,6 +20,22 @@ export type ApiResponse<T> = {
 	data: T;
 };
 
+export interface HistoryResponse {
+	id: string;
+	similarity_threshold: number;
+	query_text: string;
+	result_count: number;
+	created_at: string;
+	results: HistoryListItem[];
+}
+
+export interface HistoryListItem {
+	source_paper: string;
+	source_content: string;
+	similarity_score: number;
+	citation_suggestion: string;
+}
+
 export type ApiError = {
 	code: number;
 	status: boolean | number;
@@ -31,3 +47,7 @@ export type UninterceptedApiError = {
 	status: boolean;
 	message: string | Record<string, string[]>;
 };
+
+export function typecastReferencesResponse(data: any): string[] | undefined {
+	return data as string[] | undefined;
+}
