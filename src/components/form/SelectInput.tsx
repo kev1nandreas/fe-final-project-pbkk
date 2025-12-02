@@ -69,115 +69,139 @@ export default function SelectInput({
 
 	//#region  //*=========== Styles ===========
 	const customStyles: StylesConfig = {
-		control: (styles) => ({
+		control: (styles: any) => ({
 			...styles,
-			border: `1px solid ${error ? "#EF4444" : "#6b7280"}`, // red-500 : gray-500
+			border: `2px solid ${error ? "#ef4444" : "#bfdbfe"}`, // red-500 : blue-200
 			"&:hover": {
-				border: `1px solid ${error ? "#EF4444" : "#111827"}`, // red-500 : gray-900
-				boxShadow: "inset 0 0 0 1px #111827",
+				border: `2px solid ${error ? "#ef4444" : "#93c5fd"}`, // red-500 : blue-300
+				backgroundColor: error ? "#fef2f2" : "#eff6ff", // red-50 : blue-50
 			},
-			boxShadow: `${error ? "inset 0 0 0 1px #EF4444" : "none"}`,
+			boxShadow: "none",
 			transition: "all 300ms",
 			"&:focus-within": {
-				border: `1px solid ${error ? "#EF4444" : "#111827"}`, // red-500 : gray-900
-				boxShadow: `0 0 0 1px ${error ? "#EF4444" : "#111827"}`, // red-500 : gray-900
+				border: `2px solid ${error ? "#ef4444" : "#3b82f6"}`, // red-500 : blue-500
+				boxShadow: `0 0 0 3px ${error ? "#fee2e2" : "#dbeafe"}`, // red-100 : blue-100
 			},
 			"*": {
 				boxShadow: "none !important",
 			},
-			borderRadius: "0.375rem",
+			borderRadius: "0.5rem", // rounded-lg
 			padding: "0 0.75rem",
 			background:
-				disabled || readOnly ? "#F3F4F6" : `${error ? "#FEE2E2" : "white"}`, // light gray : red-200 : white
-			cursor: "pointer",
+				disabled || readOnly
+					? "#f3f4f6" // gray-100
+					: error
+						? "#fef2f2" // red-50
+						: "#ffffff", // white
+			cursor: disabled || readOnly ? "not-allowed" : "pointer",
 			color: "#111827", // gray-900
 			margin: "0 auto",
-			fontSize: "0.875rem",
+			fontSize: "0.875rem", // text-sm
+			minHeight: "2.5rem",
 		}),
-		valueContainer: (styles) => ({
+		valueContainer: (styles: any) => ({
 			...styles,
 			padding: 0,
 			gap: "0.5rem",
 		}),
-		input: (styles) => ({
+		input: (styles: any) => ({
 			...styles,
 			padding: 0,
 			margin: 0,
-			fontSize: "16px", // Prevent zoom on mobile
-			caretColor: "#6b7280", // gray-500
+			fontSize: "0.875rem", // text-sm
+			caretColor: "#3b82f6", // blue-500
 			color: "#111827", // gray-900
 			"::placeholder": {
-				color: "#111827", // gray-900
+				color: "#6b7280", // gray-500
 			},
 		}),
-		indicatorsContainer: (styles) => ({
+		indicatorsContainer: (styles: any) => ({
 			...styles,
 			"&>div": {
 				padding: 0,
 			},
 		}),
-		dropdownIndicator: (styles) => ({
+		dropdownIndicator: (styles: any) => ({
 			...styles,
-			color: "#111827", // gray-900
+			color: "#3b82f6", // blue-500
 			"&:hover": {
-				color: "#878787", // gray
+				color: "#2563eb", // blue-600
 			},
 		}),
-		option: (styles, state) => ({
+		option: (styles: any, state: any) => ({
 			...styles,
-			color: state.isFocused ? "white" : state.isSelected ? "white" : "black",
+			color: state.isFocused
+				? "#ffffff"
+				: state.isSelected
+					? "#ffffff"
+					: "#111827", // white : white : gray-900
 			fontWeight: state.isSelected ? "500" : "normal",
 			background: state.isDisabled
-				? "#F3F4F6" // light gray
+				? "#f3f4f6" // gray-100
 				: state.isFocused
-					? "#ea8080" // primary-400
+					? "#3b82f6" // blue-500
 					: state.isSelected
-						? "#ea8080" // primary-400
-						: "white",
+						? "#2563eb" // blue-600
+						: "#ffffff", // white
 			":hover": {
-				background: "#ee9a9a ", // primary-300
-				color: "white",
+				background: "#3b82f6", // blue-500
+				color: "#ffffff", // white
 			},
-			cursor: "pointer",
+			cursor: state.isDisabled ? "not-allowed" : "pointer",
+			transition: "all 150ms",
 		}),
-		multiValue: (styles) => ({
+		multiValue: (styles: any) => ({
 			...styles,
 			display: "flex",
 			alignItems: "center",
 			gap: "0.25rem",
-			background: "#ea8080", // primary-400
-			borderRadius: "0.375rem",
+			background: "#3b82f6", // blue-500
+			borderRadius: "0.375rem", // rounded-md
 			padding: "0.25rem 0.75rem",
 			margin: 0,
 		}),
-		multiValueLabel: (styles) => ({
+		multiValueLabel: (styles: any) => ({
 			...styles,
-			color: "white",
+			color: "#ffffff", // white
 			padding: 0,
 			paddingLeft: 0,
+			fontSize: "0.875rem", // text-sm
 		}),
-		multiValueRemove: (styles) => ({
+		multiValueRemove: (styles: any) => ({
 			...styles,
-			color: "white",
+			color: "#ffffff", // white
 			padding: 0,
 			paddingLeft: "0.5rem",
 			"&:hover": {
-				color: "#6b7280", // gray-500
+				color: "#dbeafe", // blue-100
 				backgroundColor: "transparent",
 			},
 		}),
-		menu: (styles) => ({
+		menu: (styles: any) => ({
 			...styles,
-			borderRadius: "0.5rem",
+			borderRadius: "0.75rem", // rounded-xl
 			overflow: "hidden",
-			maxHeight: "250px", // Ensures scrolling if needed
-			// scrollPaddingBottom: "0.5rem",
+			border: "2px solid #bfdbfe", // blue-200
+			boxShadow:
+				"0 10px 15px -3px rgb(59 130 246 / 0.1), 0 4px 6px -4px rgb(59 130 246 / 0.1)", // blue shadow
 		}),
-		menuList: (styles) => ({
+		menuList: (styles: any) => ({
 			...styles,
-			maxHeight: "250px", // Sets the max height for scrolling
-			overflowY: "auto", // Enables vertical scrolling
-			scrollPaddingBottom: "0.5rem",
+			maxHeight: "250px",
+			overflowY: "auto",
+			padding: "0.5rem",
+		}),
+		clearIndicator: (styles: any) => ({
+			...styles,
+			color: "#3b82f6", // blue-500
+			"&:hover": {
+				color: "#2563eb", // blue-600
+			},
+		}),
+		placeholder: (styles: any) => ({
+			...styles,
+			color: "#6b7280", // gray-500
+			fontSize: "0.875rem", // text-sm
 		}),
 	};
 	//#endregion  //*======== Styles ===========
@@ -204,7 +228,7 @@ export default function SelectInput({
 					name={id}
 					control={control}
 					rules={validation}
-					render={({ field }) => {
+					render={({ field }: any) => {
 						return (
 							<Select
 								{...field}
@@ -213,26 +237,28 @@ export default function SelectInput({
 									isMulti
 										? field.value?.map(
 												(value: unknown) =>
-													options.find((option) => option.value === value) ??
-													null,
+													options.find(
+														(option: any) => option.value === value,
+													) ?? null,
 											)
-										: (options.find((opt) => opt.value === field.value) ?? null)
+										: (options.find((opt: any) => opt.value === field.value) ??
+											null)
 								}
-								onChange={(selectedOptions) => {
+								onChange={(selectedOptions: any) => {
 									isMulti
 										? field.onChange(
 												(
 													selectedOptions as MultiValue<
 														(typeof options)[number]
 													>
-												).map((option) => option?.value ?? ""),
+												).map((option: any) => option?.value ?? ""),
 											)
 										: field.onChange(
 												(selectedOptions as (typeof options)[number])?.value ??
 													"",
 											);
 								}}
-								isDisabled={disabled}
+								isDisabled={disabled || readOnly}
 								isClearable={isClearable}
 								isMulti={isMulti}
 								isSearchable={isSearchable}
@@ -248,22 +274,19 @@ export default function SelectInput({
 								instanceId={reactId}
 								components={{
 									IndicatorSeparator: () => null,
-									DropdownIndicator: (props) => (
+									DropdownIndicator: (props: any) => (
 										<components.DropdownIndicator {...props}>
 											<ChevronDown size={18} />
 										</components.DropdownIndicator>
 									),
-									ClearIndicator: (props) => (
+									ClearIndicator: (props: any) => (
 										<components.ClearIndicator {...props}>
-											<X
-												size={18}
-												className="mr-0.5 text-typo-icons hover:text-typo-secondary"
-											/>
+											<X size={18} className="mr-0.5" />
 										</components.ClearIndicator>
 									),
-									MultiValueRemove: (props) => (
+									MultiValueRemove: (props: any) => (
 										<components.MultiValueRemove {...props}>
-											<X size={18} />
+											<X size={16} />
 										</components.MultiValueRemove>
 									),
 								}}

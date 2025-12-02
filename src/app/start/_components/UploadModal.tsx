@@ -4,14 +4,17 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
+import SelectInput from "@/components/form/SelectInput";
 import UploadFile from "@/components/form/UploadFile";
 import UnstyledLink from "@/components/links/UnstyledLink";
+import { options } from "@/lib/options";
 import { PATH } from "@/shared/path";
 import type { UploadModalProps } from "@/types/layout";
 import { useAddReferences } from "../_hooks/useAddReferences";
 
 interface ReferenceUploadData {
 	files?: FileList;
+	organization: string;
 }
 
 export default function UploadModal({
@@ -55,7 +58,7 @@ export default function UploadModal({
 			});
 			return;
 		}
-		console.log("Submitting files:", data.files);
+		console.log("Submitting files:", data);
 		const formData = new FormData();
 		Array.from(data.files).forEach((file) => {
 			formData.append("files", file);
@@ -92,7 +95,7 @@ export default function UploadModal({
 							id="files"
 							disabled={mutation.isPending}
 							accept={{ "application/pdf": [".pdf"] }}
-							maxFiles={5}
+							maxFiles={1}
 							maxSize={10 * 1024 * 1024}
 							className="border-none! bg-white! hover:bg-blue-50!"
 							validation={{
@@ -100,9 +103,18 @@ export default function UploadModal({
 							}}
 						/>
 						<p className="mt-4 text-center text-sm text-gray-500">
-							Format: PDF • Ukuran maksimal: 10MB per file • Maksimal 5 file
+							Format: PDF • Ukuran maksimal: 10MB per file • Maksimal 1 file
 						</p>
 					</div>
+
+					<SelectInput
+						id="organization"
+						label="Pilih Organisasi"
+						options={options}
+						placeholder="Pilih opsi organisasi"
+						isSearchable={false}
+						validation={{ required: "Organisasi wajib diisi!" }}
+					/>
 
 					<div className="flex flex-col sm:flex-row justify-end gap-3">
 						<Button type="button" variant="outline" className="px-8 text-black">

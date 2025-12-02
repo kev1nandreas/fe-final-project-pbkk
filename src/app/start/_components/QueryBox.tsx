@@ -3,14 +3,17 @@
 import { motion } from "framer-motion";
 import { FormProvider, type SubmitHandler, useForm } from "react-hook-form";
 import Button from "@/components/button/Button";
+import SelectInput from "@/components/form/SelectInput";
 import Slider from "@/components/form/Slider";
 import TextArea from "@/components/form/TextArea";
+import { options } from "@/lib/options";
 import type { UploadModalProps } from "@/types/layout";
 import { useSearchReferences } from "../_hooks/useQueryText";
 
 interface QueryData {
 	query_text: string;
 	similarity_threshold: number;
+	organization: string;
 }
 
 export default function QueryBox({
@@ -21,6 +24,7 @@ export default function QueryBox({
 		defaultValues: {
 			query_text: "",
 			similarity_threshold: 0.5,
+			organization: "Lainnya",
 		},
 	});
 
@@ -83,7 +87,15 @@ export default function QueryBox({
 						/>
 					</div>
 
-					<div className="rounded-2xl border-2 border-blue-200 bg-blue-50/30 p-6">
+					<div className="rounded-2xl border-2 border-blue-200 bg-blue-50/30 p-6 flex flex-col gap-5">
+						<SelectInput
+							id="organization"
+							label="Filter Sumber Organisasi"
+							options={options}
+							placeholder="Pilih sumber organisasi"
+							isSearchable={false}
+							validation={{ required: "Organisasi wajib diisi!" }}
+						/>
 						<Slider
 							id="similarity_threshold"
 							label="Tingkat Kemiripan"
