@@ -25,6 +25,7 @@ export default function UploadModal({
 	const methods = useForm<ReferenceUploadData>({
 		defaultValues: {
 			files: undefined,
+			organization: "Lainnya",
 		},
 	});
 
