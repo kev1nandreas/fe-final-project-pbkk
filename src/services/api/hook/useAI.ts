@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { typecastReferencesResponse } from "@/types/api";
+import { get, post } from "../main/call";
 import { MAIN_ENDPOINT } from "../main/endpoint";
-import { post, get } from "../main/call";
-// import { LLMRequestData } from "@/types/request"; 
+// import { LLMRequestData } from "@/types/request";
 // import { typecastHistoryByIdResponse } from "@/types/response";
 
 // export const useSearchReferences = ({
@@ -49,20 +50,39 @@ import { post, get } from "../main/call";
 // };
 
 export const useFetchHistory = (
-  onSuccess?: () => void,
-  onError?: () => void
+	onSuccess?: () => void,
+	onError?: () => void,
 ) => {
-  return useQuery({
-    queryFn: async () => {
-      const { Kind, OK } = await get(MAIN_ENDPOINT.Info.History);
-      if (!OK) {
-        throw new Error(
-          (Kind as { message: string }).message ||
-            (Kind as { Message: string }).Message
-        );
-      }
-      return (Kind as any).data;
-    },
-    queryKey: ["fetch.history"],
-  }) as any;
+	return useQuery({
+		queryFn: async () => {
+			const { Kind, OK } = await get(MAIN_ENDPOINT.Info.History);
+			if (!OK) {
+				throw new Error(
+					(Kind as { message: string }).message ||
+						(Kind as { Message: string }).Message,
+				);
+			}
+			return (Kind as any).data;
+		},
+		queryKey: ["fetch.history"],
+	}) as any;
+};
+
+export const useFetchReferences = (
+	onSuccess?: () => void,
+	onError?: () => void,
+) => {
+	return useQuery({
+		queryFn: async () => {
+			const { Kind, OK } = await get(MAIN_ENDPOINT.Info.Embeddings);
+			if (!OK) {
+				throw new Error(
+					(Kind as { message: string }).message ||
+						(Kind as { Message: string }).Message,
+				);
+			}
+			return typecastReferencesResponse((Kind as any).data);
+		},
+		queryKey: ["fetch.references"],
+	}) as any;
 };
