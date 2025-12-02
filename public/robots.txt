@@ -7,8 +7,7 @@ User-agent: *
 Disallow: /sandbox
 
 # Host
-Host: https://example.com
+Host: 'https://senopati.its.ac.id/citation-checker' # Site URL
 
 # Sitemaps
-Sitemap: https://example.com/sitemap.xml
-Sitemap: undefined/sitemap.xml
+Sitemap: 'https://senopati.its.ac.id/citation-checker' # Site URL/sitemap.xml
