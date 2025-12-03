@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 	},
 	icons: {
-		icon: "/logo-citacheck.png",
+		icon: "/favicon.ico",
 	},
 	robots: { index: true, follow: true },
 	authors: [
