@@ -11,4 +11,5 @@ export const PATH = {
 	HISTORY: IsDevelopment ? "/history" : `${BASE_PATH}/history`,
 	REFERENCES: IsDevelopment ? "/references" : `${BASE_PATH}/references`,
 	PRIVATE: "/guard/ex",
+	ASSET_URL: IsDevelopment ? "" : `${BASE_PATH}`,
 };

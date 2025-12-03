@@ -59,11 +59,11 @@ export default function UploadModal({
 			});
 			return;
 		}
-		console.log("Submitting files:", data);
 		const formData = new FormData();
 		Array.from(data.files).forEach((file) => {
-			formData.append("files", file);
+			formData.append("file", file);
 		});
+		formData.append("organization", data.organization);
 		mutation.mutateAsync(formData);
 	};
 

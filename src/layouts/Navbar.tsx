@@ -54,7 +54,7 @@ export default function Navbar() {
 						<NextImage
 							width={300}
 							height={300}
-							src={"/logo-citacheck.png"}
+							src={`${PATH.ASSET_URL}/logo-citacheck.png`}
 							alt="Logo"
 							priority
 							serverStaticImg
