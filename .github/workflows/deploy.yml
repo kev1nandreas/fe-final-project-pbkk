@@ -22,18 +22,17 @@ jobs:
           tailscale ip -4
           tailscale status
           echo "Pinging VPS..."
-          ping -c 4 ${{ secrets.SSH_HOST }} || true
+          ping -c 4 ${{ secrets.VPS_HOST }} || true
           echo "Check port..."
-          nc -vz ${{ secrets.SSH_HOST }} ${{ secrets.SSH_PORT }} || true
+          nc -vz ${{ secrets.SSH_HOST }} 22 || true
 
 
       - name: deploy be
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /home/user-c-3/fe-final-project-pbkk
             git stash
