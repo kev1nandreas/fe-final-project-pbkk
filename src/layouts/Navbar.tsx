@@ -54,7 +54,7 @@ export default function Navbar() {
 						<NextImage
 							width={300}
 							height={300}
-							src={`/logo.png`}
+							src="https://s6.imgcdn.dev/YPFvSL.png"
 							alt="Logo"
 							priority
 							serverStaticImg
