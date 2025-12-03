@@ -49,10 +49,19 @@ jobs:
 
     steps:
       - name: Connect to Tailscale (Deploy Runner)
-        uses: tailscale/github-action@v2
+        uses: tailscale/github-action@v4
         with:
           authkey: ${{ secrets.TAILSCALE_KEY }}
-          args: "--hostname=github-ci-deploy --accept-routes --accept-dns"
+          version: latest
+
+      - name: Debug Tailscale
+        run: |
+          tailscale ip -4
+          tailscale status
+          echo "Pinging VPS..."
+          ping -c 4 ${{ secrets.SSH_HOST }} || true
+          echo "Check port..."
+          nc -vz ${{ secrets.SSH_HOST }} ${{ secrets.SSH_PORT }} || true
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
