@@ -6,7 +6,6 @@ import Head from "next/head";
 import Providers from "@/app/providers";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import Layout from "@/layouts/Layout";
-import { PATH } from "@/shared/path";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -28,7 +27,7 @@ export const metadata: Metadata = {
 		card: "summary_large_image",
 	},
 	icons: {
-		icon: `${PATH.ASSET_URL}/favicon.ico`,
+		icon: "/favicon.ico",
 	},
 	robots: { index: true, follow: true },
 	authors: [
