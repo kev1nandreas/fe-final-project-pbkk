@@ -1,3 +1,4 @@
+import FloatingHelpButton from "@/components/FloatingHelpButton";
 import Footer from "@/layouts/Footer";
 import Navbar from "@/layouts/Navbar";
 
@@ -16,6 +17,7 @@ export default function Layout({
 	return (
 		<>
 			{withNavbar && <Navbar />}
+			<FloatingHelpButton href="https://drive.google.com/drive/folders/1JFsc-2r0-0XWEDBTtNyj4eoKLyAwEFnV?usp=sharing" />
 			<main className={className}>{children}</main>
 			{withFooter && <Footer />}
 		</>
