@@ -24,7 +24,7 @@ export default function QueryBox({
 		defaultValues: {
 			query_text: "",
 			similarity_threshold: 0.5,
-			organization: "Lainnya",
+			organization: "Semuanya",
 		},
 	});
 
