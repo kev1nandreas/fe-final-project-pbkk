@@ -5,7 +5,16 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_RUN_MODE=${NEXT_PUBLIC_RUN_MODE}
+        - NEXT_PUBLIC_API_URL_DEV=${NEXT_PUBLIC_API_URL_DEV}
+        - NEXT_PUBLIC_API_URL_PROD=${NEXT_PUBLIC_API_URL_PROD}
+        - NEXT_PUBLIC_TOKEN_KEY=${NEXT_PUBLIC_TOKEN_KEY}
+        - NEXT_PUBLIC_MEASUREMENT_ID=${NEXT_PUBLIC_MEASUREMENT_ID}
+        - SITE_URL=${SITE_URL}
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+    env_file:
+      - .env
