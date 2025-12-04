@@ -6,7 +6,7 @@ import { PATH } from "./shared/path";
 const TOKEN_KEY = ENV.TOKEN_KEY;
 // const JWT_SECRET = ENV.JWT_SCREET;
 
-export async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
 	const token = request.cookies.get(TOKEN_KEY);
 	console.log({ token });
 
