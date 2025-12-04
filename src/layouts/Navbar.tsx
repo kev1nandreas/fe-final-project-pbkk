@@ -3,8 +3,8 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Button from "@/components/button/Button";
+import Logo from "@/components/Logo";
 import UnstyledLink from "@/components/links/UnstyledLink";
-import NextImage from "@/components/NextImage";
 import { PATH } from "@/shared/path";
 
 const navLinks = [
@@ -49,17 +49,9 @@ export default function Navbar() {
 					{/* Logo */}
 					<UnstyledLink
 						href={PATH.HOME}
-						className="flex items-center gap-2 max-md:gap-1"
+						className="flex items-center max-md:gap-1"
 					>
-						<NextImage
-							width={300}
-							height={300}
-							src="/logo.png"
-							alt="Logo"
-							priority
-							serverStaticImg
-							className="flex max-w-[30px] items-center md:max-w-[40px]"
-						/>
+						<Logo />
 						<p className="text-lg sm:text-xl text-gray-900 font-semibold hidden sm:block">
 							CitaCheck
 						</p>
