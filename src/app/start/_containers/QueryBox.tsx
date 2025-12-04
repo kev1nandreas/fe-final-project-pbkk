@@ -29,17 +29,13 @@ export default function QueryBox({
 	});
 
 	const mutation = useSearchReferences({
-		onSuccess: (data) => {
-			console.log("Search results:", data);
-		},
+		onSuccess: () => {},
 		onError: (error) => {
 			console.error("Error searching references:", error);
 		},
 	});
 
 	const handleSubmit: SubmitHandler<QueryData> = (data) => {
-		console.log("Submitting query:", data);
-
 		mutation.mutate(data);
 	};
 
@@ -70,7 +66,7 @@ export default function QueryBox({
 					<div className="rounded-2xl border-2 border-blue-200 bg-blue-50/30 p-6">
 						<TextArea
 							id="query_text"
-							label="Pertanyaan"
+							label="Teks yang akan dicari referensinya"
 							placeholder="Contoh: Steganografi adalah teknik menyembunyikan informasi di dalam media digital."
 							disabled={mutation.isPending}
 							rows={6}

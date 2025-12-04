@@ -8,7 +8,6 @@ const TOKEN_KEY = ENV.TOKEN_KEY;
 
 export default async function proxy(request: NextRequest) {
 	const token = request.cookies.get(TOKEN_KEY);
-	console.log({ token });
 
 	// Cek apakah user sudah berada di halaman "not found" untuk menghindari redirect loop
 	if (request.nextUrl.pathname === PATH.NOT_FOUND) {
