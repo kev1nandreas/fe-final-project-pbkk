@@ -2,7 +2,6 @@
 
 import { HelpCircle, X } from "lucide-react";
 import { useState } from "react";
-import Button from "./button/Button";
 
 interface FloatingHelpButtonProps {
 	href?: string | "#";
@@ -33,14 +32,24 @@ export default function FloatingHelpButton(_props: FloatingHelpButtonProps) {
 
 			{/* Video Modal */}
 			{isModalOpen && (
-				<Button
+				<button
+					type="button"
+					tabIndex={0}
 					className="fixed inset-0 z-100 flex items-center justify-center bg-black/70 backdrop-blur-sm"
 					onClick={closeModal}
+					onKeyDown={(e) => {
+						if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+							closeModal();
+						}
+					}}
+					aria-label="Close modal overlay"
 				>
-					<Button
-						type="button"
+					<div
+						role="dialog"
+						aria-modal="true"
 						className="relative w-full max-w-4xl mx-4 bg-white rounded-lg shadow-2xl overflow-hidden"
 						onClick={(e) => e.stopPropagation()}
+						onKeyDown={(e) => e.stopPropagation()}
 					>
 						{/* Close Button */}
 						<button
@@ -62,8 +71,8 @@ export default function FloatingHelpButton(_props: FloatingHelpButtonProps) {
 								allowFullScreen
 							/>
 						</div>
-					</Button>
-				</Button>
+					</div>
+				</button>
 			)}
 		</>
 	);
