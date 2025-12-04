@@ -70,7 +70,7 @@ export default function HistoryPageContainer() {
 
 	return (
 		<section id="history" className="flex min-h-screen py-20 items-center">
-			<div className="mx-auto px-6 lg:px-[13%]">
+			<div className="mx-auto px-6 md:px-[13%]">
 				<div className="flex flex-col items-start gap-12 lg:mt-10">
 					<div
 						ref={heroTextRef}

@@ -34,10 +34,10 @@ export default function ReferencesPageContainer() {
 	return (
 		<section
 			id="references"
-			className="flex min-h-[calc(100vh-5rem)] py-20 items-center"
+			className="flex min-h-[calc(100vh-4rem)] pt-20 items-center"
 		>
 			<div className="mx-auto px-6 lg:px-[13%] w-full">
-				<div className="flex flex-col lg:flex-row items-start lg:items-center gap-12">
+				<div className="flex flex-col md:flex-row items-start md:items-center gap-12">
 					{/* Left side - Text content */}
 					<div
 						ref={heroTextRef}
